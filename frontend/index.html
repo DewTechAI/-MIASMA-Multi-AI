@@ -1,0 +1,2737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>window.__errs=[];window.addEventListener('error',e=>{window.__errs.push((e.message||'')+' @'+(e.filename||'')+':'+(e.lineno||''));var d=document.getElementById('jserr');if(d)d.textContent=window.__errs.join(' | ').slice(0,500)});window.addEventListener('unhandledrejection',e=>{window.__errs.push('promise: '+(e.reason&&e.reason.message||e.reason));var d=document.getElementById('jserr');if(d)d.textContent=window.__errs.join(' | ').slice(0,500)});</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ᛗᛁᚨᛋᛗᚨ</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
+<style>
+/* ================= MIASMA DESIGN TOKENS (Figma-exact) ================= */
+:root{ /* Obsidian Purple · dark */
+  --bg:#040406; --bg2:#08070C; --panel:#120D1A; --panel2:#191221; --raise:#1E1830;
+  --sidebar:#08070C; --code:#0E0A16; --track:rgba(183,165,212,.09);
+  --border:#281B3B; --border-soft:rgba(183,165,212,.10);
+  --fg:#EDE9F5; --dim:#91859F; --placeholder:#776784;
+  --accent:#B7A5D4; --accent2:#522B7A; --accent-deep:#3B1E5C; --accent-ink:#EDE9F5;
+  --link:#B7A5D4; --send:#522B7A;
+  --ok:#5fae8f; --warn:#c9a86a; --err:#c97b7b;
+  --radius:10px; --shadow:0 10px 34px rgba(0,0,0,.5); --lift:0 12px 30px rgba(0,0,0,.32);
+  --hover:rgba(237,233,245,.05); --header:rgba(4,4,6,.72); --scroll:#2A1E3D;
+  --think:#91859F; --thinkbg:rgba(183,165,212,.06);
+  --userbg:#191221; --cardbg:#120D1A;
+}
+[data-theme="light"]{ /* Obsidian Purple · light — warm stone */
+  --bg:#F2EFE9; --bg2:#EAE6DE; --panel:#F7F5F0; --panel2:#E9E4D9; --raise:#F0EBE0;
+  --sidebar:#ECE8DF; --code:#F5F2EA; --track:rgba(90,80,60,.08);
+  --border:#D8D2C4; --border-soft:rgba(90,80,60,.12);
+  --fg:#2A2721; --dim:#6E6A5E; --placeholder:#8d887a;
+  --accent:#6B5A48; --accent2:#7A684F; --accent-deep:#5C4C3B; --accent-ink:#2A2721;
+  --link:#6B5A48; --send:#7A684F;
+  --ok:#2e7d5b; --warn:#96702c; --err:#a33b3b;
+  --shadow:0 8px 24px rgba(59,30,92,.08); --lift:0 12px 30px rgba(59,30,92,.10);
+  --hover:rgba(23,19,31,.05); --header:rgba(246,244,250,.85); --scroll:#D8CFE8;
+  --think:#776784; --thinkbg:rgba(91,58,130,.05);
+  --userbg:#EDE8F5; --cardbg:#FFFFFF;
+}
+[data-accent="blue"]{ /* Abyssal Blue · dark */
+  --bg:#040406; --bg2:#07090E; --panel:#111622; --panel2:#132238; --raise:#182B47;
+  --sidebar:#07090E; --code:#0A1420; --track:rgba(143,168,200,.09);
+  --border:#253D5E; --border-soft:rgba(143,168,200,.10);
+  --fg:#DCE6F5; --dim:#899CB8; --placeholder:#6E7F99;
+  --accent:#8FB3E8; --accent2:#1E4E9E; --accent-deep:#14305E; --accent-ink:#0E1B30;
+  --link:#8FB3E8; --send:#1E4E9E;
+  --ok:#5fae8f; --warn:#c9a86a; --err:#c97b7b;
+  --shadow:0 10px 34px rgba(0,0,0,.5); --lift:0 12px 30px rgba(0,0,0,.32);
+  --hover:rgba(220,230,245,.05); --header:rgba(4,4,6,.72); --scroll:#16273C;
+  --think:#7E97B8; --thinkbg:rgba(120,150,200,.08);
+  --userbg:#16294A; --cardbg:#0E1A2E;
+}
+[data-accent="blue"][data-theme="light"]{ /* Abyssal Blue · light — slate-stone */
+  --bg:#EEF0EC; --bg2:#E4E7E1; --panel:#F4F5F1; --panel2:#E2E5DE; --raise:#E9EBE4;
+  --sidebar:#E7E9E2; --code:#F2F3EE; --track:rgba(70,80,70,.08);
+  --border:#D3D8CC; --border-soft:rgba(70,80,70,.12);
+  --fg:#23261F; --dim:#5F6455; --placeholder:#83887A;
+  --accent:#5A6B58; --accent2:#66755F; --accent-deep:#48573F; --accent-ink:#23261F;
+  --link:#5A6B58; --send:#66755F;
+  --ok:#2e7d5b; --warn:#96702c; --err:#a33b3b;
+  --shadow:0 8px 24px rgba(17,24,36,.08); --lift:0 12px 30px rgba(17,24,36,.10);
+  --hover:rgba(17,24,36,.05); --header:rgba(255,255,255,.85); --scroll:#CBD9E8;
+  --think:#5A6C85; --thinkbg:rgba(51,97,158,.05);
+  --userbg:#E6EEF8; --cardbg:#FFFFFF;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+html{background:var(--bg)}
+body{
+  background:transparent;
+  color:var(--fg);
+  font:14px/1.6 "Geist","Inter",system-ui,-apple-system,"Segoe UI",sans-serif,"Noto Color Emoji","Apple Color Emoji","Segoe UI Emoji";
+  display:flex;overflow:hidden;
+}
+.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+::selection{background:var(--accent)}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-thumb{background:var(--scroll);border-radius:4px}
+::-webkit-scrollbar-track{background:transparent}
+button{font:inherit;color:inherit;border:0;cursor:pointer}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ================= SIDEBAR ================= */
+aside{width:clamp(240px,20vw,280px);flex-shrink:0;display:flex;flex-direction:column;position:relative;z-index:1;
+  margin:14px 0 14px 14px;height:calc(100% - 28px);
+  background:color-mix(in srgb,var(--sidebar) 45%,transparent);
+  border:1px solid var(--border-soft);border-radius:20px;
+  box-shadow:var(--lift);overflow:hidden}
+.shead{display:flex;flex-direction:row;align-items:center;flex-wrap:nowrap;gap:12px;padding:26px 22px 0}
+.badge{width:38px;height:38px;border-radius:12px;flex-shrink:0;
+  background:var(--cardbg);border:1px solid var(--border-soft);box-shadow:var(--lift);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:17px;color:var(--accent)}
+.shead .titles{flex:1;min-width:0;overflow:hidden}
+.shead .name{font-size:17px;font-weight:600;letter-spacing:1.5px;color:var(--fg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shead .tag{font-family:"IBM Plex Mono",monospace;font-size:8px;letter-spacing:1.5px;
+  color:var(--dim);margin-top:3px}
+.shead .dot{width:5px;height:5px;border-radius:50%;background:var(--err);margin-top:8px;flex-shrink:0}
+.shead .dot.on{background:var(--accent)}
+#themebtn{width:26px;height:26px;border-radius:6px;border:1px solid var(--border-soft);
+  background:var(--cardbg);color:var(--dim);cursor:pointer;font-size:12px;
+  display:flex;align-items:center;justify-content:center;margin-top:4px;transition:.25s}
+#themebtn:hover{color:var(--fg);border-color:var(--accent)}
+#newchat{margin:18px 20px 0;padding:0 13px 0 13px;height:42px;border-radius:14px;width:208px;
+  background:var(--cardbg);border:1px solid var(--border-soft);box-shadow:var(--lift);color:var(--fg);
+  font-size:13px;display:flex;align-items:center;gap:12px;padding-left:13px;
+  transition:border-color .25s;flex-shrink:0}
+#newchat:hover{border-color:var(--accent)}
+#newchat .k{margin-left:auto;flex-shrink:0;font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--dim)}
+nav{padding:26px 16px 0;display:flex;flex-direction:column;gap:4px}
+.nav{position:relative;display:flex;align-items:center;gap:14px;height:40px;
+  padding:0 14px;border-radius:12px;color:var(--dim);font-size:14px;cursor:pointer;
+  width:100%;text-align:left;background:none;transition:background .25s,color .25s}
+.nav .ic{width:18px;text-align:center;font-size:13px}
+.nav:hover{background:var(--hover);color:var(--fg)}
+.nav.active{background:color-mix(in srgb,var(--panel2) 60%,transparent);color:var(--fg);box-shadow:var(--lift)}
+.nav.active::before{content:'';position:absolute;left:4px;top:10px;bottom:10px;width:2px;
+  border-radius:1px;background:var(--accent)}
+.nl{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:1.5px;
+  color:var(--dim);padding:22px 28px 10px;border-bottom:1px solid var(--border-soft);
+  margin:0 16px 4px}
+#chatlist{flex:1;overflow-y:auto;padding:0 16px;display:flex;flex-direction:column;gap:2px}
+.chatitem{display:flex;align-items:center;height:36px;padding:0 12px;border-radius:12px;
+  color:var(--dim);font-size:12px;cursor:pointer;transition:.2s;position:relative}
+.chatitem:hover{background:var(--hover);color:var(--fg)}
+.chatitem.active{background:var(--cardbg);color:var(--accent);font-weight:500;box-shadow:var(--lift)}
+.chatitem .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chatitem .d{color:var(--dim);font-size:10px;flex-shrink:0;font-family:"IBM Plex Mono",monospace}
+.chatitem .x{opacity:0;color:var(--dim);font-size:11px;padding:0 4px;flex-shrink:0}
+.chatitem:hover .x{opacity:1}
+.chatitem .x:hover{color:var(--err)}
+#allchats{display:flex;justify-content:space-between;align-items:center;
+  padding:14px 28px;color:var(--dim);font-size:11px;cursor:pointer;transition:.2s}
+#allchats:hover{color:var(--fg)}
+.syscard{margin:14px 20px 0;background:color-mix(in srgb,var(--cardbg) 55%,transparent);border:1px solid var(--border-soft);
+  border-radius:14px;box-shadow:var(--lift);padding:14px 14px 16px;flex-shrink:0}
+.syscard .st{display:flex;align-items:center;gap:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:1.5px;
+  color:var(--accent);margin-bottom:12px}
+.syscard .st i{width:5px;height:5px;border-radius:2px;background:var(--accent);display:inline-block}
+.sysrow{display:flex;justify-content:space-between;align-items:baseline;
+  font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--dim);padding:6px 0}
+.sysrow b{color:var(--accent);font-weight:500;font-size:11px}
+.sysrow.warn b{color:var(--warn)} .sysrow.crit b{color:var(--err)}
+.syscard .sysrows{display:flex;flex-direction:column;
+  max-height:200px;opacity:1;overflow:hidden;transition:max-height .35s ease,opacity .35s ease}
+.syscard.collapsed .sysrows{max-height:0;opacity:0}
+.syscard .st{justify-content:space-between}
+#sysToggle{background:none;border:1px solid var(--border-soft);color:var(--dim);
+  width:20px;height:20px;border-radius:6px;font-size:10px;line-height:1;
+  display:flex;align-items:center;justify-content:center;transition:.25s;cursor:pointer}
+#sysToggle:hover{color:var(--fg);border-color:var(--accent)}
+.devfoot{display:flex;justify-content:space-between;padding:14px 28px 20px;
+  color:var(--dim);font-size:11px}
+.devfoot span:last-child{font-family:"IBM Plex Mono",monospace;font-size:10px}
+
+/* ================= MAIN ================= */
+main{flex:1;display:flex;flex-direction:column;min-width:0;position:relative;z-index:1;margin-left:14px}
+.topbar{height:88px;display:flex;align-items:center;gap:16px;padding:0 40px;
+  box-shadow:0 10px 30px -18px rgba(0,0,0,.45);flex-shrink:0}
+.topbar .tt{font-size:14px;font-weight:500;color:var(--fg)}
+.topbar .ts{font-size:14px;color:var(--dim);margin-left:8px}
+.topbar .sp{flex:1}
+.topbar .local{display:flex;align-items:center;gap:8px;
+  font-size:11px;color:var(--accent)}
+.topbar .local i{width:5px;height:5px;border-radius:3px;background:var(--accent)}
+select,input{font:inherit}
+select:focus,input:focus{border-color:color-mix(in srgb,var(--accent) 55%,transparent);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 14%,transparent)}
+input{background:var(--cardbg);border:1px solid var(--border-soft);border-radius:10px;
+  padding:8px 12px;color:var(--fg);font-size:13px;outline:none;transition:border-color .25s}
+select{background:#071022;color:#eef4ff;border:1px solid rgba(148,185,255,.2);border-radius:8px;padding:7px 10px;font-size:12px;outline:none}
+select:hover{border-color:var(--accent)}
+select option{background:#071022;color:#eef4ff;padding:6px 10px}
+select option:hover,select option:checked{background:rgba(59,130,246,.25);color:#fff}
+[data-theme="light"] select{background:#fff;color:#1a1a1a;border-color:#ccc}
+[data-theme="light"] select option{background:#fff;color:#1a1a1a}
+button.act{background:var(--send);border:none;color:#fff;border-radius:12px;
+  padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;transition:filter .25s}
+button.act:hover{filter:brightness(1.15)}
+button.ghost{background:var(--cardbg);border:1px solid var(--border-soft);color:var(--dim);
+  border-radius:12px;padding:7px 12px;font-size:11.5px;cursor:pointer;transition:.25s}
+button.ghost:hover{color:var(--fg);border-color:var(--accent)}
+.topbtn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  height:36px;padding:0 16px;font-size:12.5px;font-weight:600;letter-spacing:.2px;
+  border-radius:999px;cursor:pointer;transition:all .2s;
+  background:rgba(15,23,42,.72);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border:1px solid rgba(148,163,184,.25);color:var(--fg)}
+.topbtn:hover{border-color:var(--accent);background:rgba(30,50,80,.8);
+  box-shadow:0 4px 14px -6px rgba(120,160,220,.35)}
+.topbtn svg{width:15px;height:15px;stroke:var(--accent);flex-shrink:0}
+section.page{display:none;flex:1;flex-direction:column;min-height:0}
+section.page.active{display:flex}
+
+/* ---------- chat ---------- */
+#chatwrap{flex:1;overflow-y:auto}
+#chatcol{width:clamp(720px,82vw,1280px);max-width:100%;margin:0 auto;padding:28px clamp(16px,3vw,32px) 16px;
+  display:flex;flex-direction:column;gap:20px}
+.hero{padding:8px 0 4px}
+.hero h2{font-size:30px;font-weight:300;color:var(--fg);letter-spacing:-.3px}
+.hero p{color:var(--dim);font-size:14px;margin-top:8px}
+.chathead{display:flex;gap:12px;align-items:center;margin-bottom:4px;
+  position:sticky;top:10px;z-index:20;flex-wrap:wrap;
+  background:color-mix(in srgb,var(--cardbg) 45%,transparent);
+  -webkit-backdrop-filter:blur(14px) saturate(1.3);
+  backdrop-filter:blur(14px) saturate(1.3);
+  padding:10px 14px;margin:-2px -14px 4px;border-radius:18px;
+  border:1px solid color-mix(in srgb,var(--accent) 18%,var(--border-soft));
+  box-shadow:0 8px 24px -16px rgba(0,0,0,.35),inset 0 1px 0 color-mix(in srgb,var(--fg) 8%,transparent);
+  transition:box-shadow .3s ease, border-color .3s ease}
+.chathead.scrolled{box-shadow:0 8px 20px -14px rgba(0,0,0,.4)}
+#modelpick{display:flex;align-items:center;gap:9px;background:var(--cardbg);
+  border:1px solid var(--border-soft);border-radius:6px;padding:8px 14px;
+  font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--accent);cursor:pointer}
+#modelpick i{width:5px;height:5px;border-radius:3px;background:var(--accent);display:inline-block}
+#provider{font-family:"IBM Plex Mono",monospace;font-size:11px}
+.msg{animation:fadeUp .35s ease-out}
+@keyframes fadeUp{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.msg.user{align-self:flex-end;max-width:900px;width:fit-content;min-width:0;
+  background:color-mix(in srgb,var(--userbg) 55%,transparent);
+  -webkit-backdrop-filter:blur(16px) saturate(1.4);backdrop-filter:blur(16px) saturate(1.4);
+  border:1px solid color-mix(in srgb,var(--accent) 20%,var(--border-soft));
+  box-shadow:inset 0 1px 0 color-mix(in srgb,var(--fg) 9%,transparent),var(--lift);
+  border-radius:26px;
+  padding:10px 18px 12px}
+.msg.user .mlabel{display:block;font-family:"IBM Plex Mono",monospace;font-size:9px;
+  letter-spacing:1.5px;color:var(--accent);margin-bottom:4px}
+.msg.user .utext{font-size:15px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
+.msg.assistant{align-self:flex-start;width:fit-content;max-width:980px;min-width:0;
+  background:color-mix(in srgb,var(--cardbg) 50%,transparent);
+  -webkit-backdrop-filter:blur(16px) saturate(1.4);backdrop-filter:blur(16px) saturate(1.4);
+  border:1px solid color-mix(in srgb,var(--accent) 18%,var(--border-soft));
+  box-shadow:inset 0 1px 0 color-mix(in srgb,var(--fg) 9%,transparent),var(--lift);
+  border-radius:8px 26px 26px 26px;padding:12px 20px 15px}
+.msg.assistant:has(.thought){width:100%;}
+.msg.assistant .who{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.msg.assistant .who .av{width:20px;height:20px;border-radius:6px;background:var(--cardbg);
+  border:1px solid var(--border-soft);display:inline-flex;align-items:center;justify-content:center;
+  font-size:10px;color:var(--accent);font-weight:700}
+.msg.assistant .who .wn{font-family:"IBM Plex Mono",monospace;font-size:10px;
+  letter-spacing:1.5px;color:var(--accent);text-transform:uppercase}
+.msg.assistant .body{font-size:15px;line-height:1.65;letter-spacing:.1px;color:var(--fg);overflow-wrap:anywhere}
+.msg.assistant .body div{margin:13px 0}
+.msg.assistant .body div:first-child{margin-top:0}
+.msg.assistant .body div:last-child{margin-bottom:0}
+.msg ul,.msg ol{margin:16px 0;padding-left:26px}
+.msg ul+.msg ol,.msg ol+.msg ul,.msg ul+div,.msg ol+div,
+.msg div+.msg ul,.msg div+.msg ol{margin-top:20px}
+.msg li{margin:10px 0;line-height:1.7;padding-left:4px}
+.msg li::marker{color:var(--accent)}
+.msg strong{font-weight:700}
+.msg .mdh{font-weight:700;font-size:15.5px;margin:26px 0 10px;color:var(--accent);
+  padding-bottom:10px;border-bottom:1px solid var(--border-soft)}
+.msg .mdh:first-child{margin-top:0}
+.msg .mdh2{font-weight:700;font-size:14px;margin:17px 0 5px;color:var(--accent)}
+.msg .mdh2:first-child{margin-top:0}
+.msg code{color:var(--link);font-family:"IBM Plex Mono",monospace;font-size:12.5px}
+.msg pre code{color:var(--fg)}
+.msg pre{background:var(--code);border:1px solid var(--border-soft);border-radius:8px;
+  padding:13px;overflow-x:auto;margin:10px 0}
+.msg .meta{display:none}
+.msg .thought{display:block;width:100%;max-width:100%;min-width:0;flex:1 1 auto;border:1px solid var(--border-soft);border-radius:12px;
+  padding:10px 14px;margin-bottom:12px;background:var(--thinkbg);
+  font-size:12.5px;color:var(--think)}
+.msg .thought .th{display:flex;align-items:center;gap:7px;cursor:pointer;
+  user-select:none;font-family:"IBM Plex Mono",monospace;font-size:10px;
+  letter-spacing:1px;text-transform:uppercase;color:var(--accent)}
+.msg .thought .th::before{content:'▸';transition:transform .25s ease}
+.msg .thought.open .th::before{transform:rotate(90deg)}
+.msg .thought .th .dur{color:var(--dim);text-transform:none;letter-spacing:0}
+.msg .thought .tbody{display:none;width:100%;max-width:100%;min-width:0;flex:1 1 auto;
+  margin-top:9px;white-space:pre-line;overflow-wrap:break-word;word-break:normal;
+  line-height:1.7}
+.msg .thought.open .tbody{display:block}
+.msg .thought.open .tbody{display:block}
+.msg.sys{align-self:center;color:var(--dim);font-size:11.5px;padding:3px 12px;
+  text-align:center;font-family:"IBM Plex Mono",monospace}
+.msg.trace{align-self:stretch;background:var(--thinkbg);
+  border:1px dashed var(--border-soft);border-radius:8px;padding:10px 16px;
+  font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--think)}
+.msg.trace .tlabel{color:var(--accent);font-weight:700;font-size:9px;
+  letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;
+  gap:6px;cursor:pointer;user-select:none}
+.msg.trace .tlabel::before{content:'▸';transition:transform .2s}
+.msg.trace.open .tlabel::before{transform:rotate(90deg)}
+.msg.trace .tbody{margin-top:7px;display:flex;flex-direction:column;gap:4px}
+.msg.trace:not(.open) .tbody{display:none}
+.tline{display:flex;gap:9px;align-items:baseline}
+.tline .tag{flex-shrink:0;min-width:88px;font-weight:700;font-size:9px;
+  letter-spacing:.5px;text-transform:uppercase}
+.tline.c-agent_msg .tag{color:var(--accent)}
+.tline.c-thought .tag{color:var(--dim)}
+.tline.c-tool_call .tag{color:var(--link)}
+.tline.c-tool_result .tag{color:var(--ok)}
+.tline.c-tool_result.bad .tag{color:var(--err)}
+.badge.thinking{animation:badgePulse 2.6s ease-in-out infinite}
+@keyframes badgePulse{0%,100%{opacity:1}50%{opacity:.55}}
+
+#procbar{display:none;align-items:center;gap:7px;flex-shrink:0;
+  background:var(--panel2);border:1px solid var(--accent);
+  border-radius:999px;padding:7px 14px;font-size:10px;color:var(--fg);
+  font-family:"IBM Plex Mono",monospace;letter-spacing:.5px;
+  text-transform:uppercase;white-space:nowrap;transition:opacity .3s ease;
+  box-shadow:var(--lift);max-width:220px;overflow:hidden}
+#procbar.on{display:inline-flex}
+#procbar #proctext{color:var(--dim);letter-spacing:1px}
+#procbar #procmod{color:var(--accent);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#procbar{cursor:pointer}
+#procbar .pulse{width:6px;height:6px;border-radius:50%;background:var(--accent);
+  animation:procPulse 1.6s infinite;flex-shrink:0}
+@keyframes procPulse{0%,100%{opacity:.3}50%{opacity:1}}
+#composerwrap{padding:14px clamp(16px,3vw,32px) 18px}
+#composer{width:clamp(720px,82vw,1280px);max-width:100%;margin:0 auto;background:color-mix(in srgb,var(--cardbg) 45%,transparent);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  border:1px solid var(--border-soft);border-radius:22px;padding:16px 18px 12px;
+  box-shadow:var(--lift),inset 0 1px 0 var(--border-soft);transition:border-color .3s}
+#composer:focus-within{border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
+#prompt{width:100%;background:none;border:none;color:var(--fg);font-size:16px;
+  padding:0;resize:none;outline:none;min-height:26px}
+#prompt,#prompt::placeholder{font-family:inherit,"Noto Color Emoji","Apple Color Emoji","Segoe UI Emoji"}
+#prompt::placeholder{color:var(--placeholder)}
+.cfoot{display:flex;align-items:center;gap:12px;margin-top:12px}
+.cfoot .hint{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--dim)}
+.cfoot .sp{flex:1}
+#send{display:none;width:36px;height:36px;border-radius:50%;border:none;cursor:pointer;
+  flex-shrink:0;align-items:center;justify-content:center;font-size:14px;transition:.25s}
+#send.on{display:flex}
+#stopbtn{display:none!important}
+#send{background:var(--send);color:#fff;box-shadow:0 4px 14px color-mix(in srgb,var(--send) 35%,transparent)}
+#send:hover{filter:brightness(1.15)}
+#send:disabled{opacity:.4;cursor:default}
+#stopbtn{background:linear-gradient(135deg,#c97b7b,#a35555);color:#fff;font-size:10px;border-radius:999px;letter-spacing:.5px;}
+  box-shadow:0 4px 14px rgba(201,123,123,.35);display:none}
+#stopbtn:hover{filter:brightness(1.1)}
+#stopbtn{padding:0 14px;font-family:"IBM Plex Mono",monospace}
+.cnote{text-align:center;color:var(--dim);font-size:10px;margin-top:12px;
+  font-family:"IBM Plex Mono",monospace;letter-spacing:.5px}
+
+/* ---------- telemetry ---------- */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:14px;padding:26px 40px;max-width:1100px;width:100%;margin:0 auto}
+.card{background:var(--cardbg);border:1px solid var(--border-soft);border-radius:18px;box-shadow:var(--lift);padding:20px}
+.card .label{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:1.5px;
+  color:var(--dim);text-transform:uppercase}
+.card .value{font-size:30px;font-weight:600;margin-top:8px;letter-spacing:-.5px}
+.card .sub{color:var(--dim);font-size:11.5px;margin-top:2px;font-family:"IBM Plex Mono",monospace}
+.card .bar{height:4px;background:var(--track);border-radius:2px;margin-top:14px;overflow:hidden}
+.card .bar>div{height:100%;border-radius:2px;
+  background:linear-gradient(90deg,var(--accent2),var(--accent));transition:width .5s}
+.card.warn .bar>div{background:linear-gradient(90deg,#c9a86a,#e8c98a)}
+.card.crit .bar>div{background:linear-gradient(90deg,#c97b7b,#e8a0a0)}
+#chartwrap{padding:0 40px 26px;max-width:1100px;width:100%;margin:0 auto}
+canvas{width:100%;height:180px;background:var(--cardbg);border:1px solid var(--border-soft);
+  border-radius:10px}
+#tierbadge{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--dim)}
+
+/* workspace explorer */
+.wscard{background:rgba(8,16,34,.20);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:14px;cursor:pointer;transition:.2s;position:relative;overflow:hidden}
+.wscard:hover{border-color:var(--accent);transform:translateY(-2px)}
+.wsicon{width:36px;height:36px;border-radius:10px;background:rgba(59,130,246,.15);display:flex;align-items:center;justify-content:center;color:var(--accent);margin-bottom:8px}
+.wsname{font-size:12px;font-weight:600;color:var(--fg);margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wssub{font-size:10px;color:var(--dim)}
+.fnode .cnt{margin-left:auto;font-size:9px;color:var(--dim);background:rgba(255,255,255,.12);padding:3px 8px;border-radius:8px;flex-shrink:0;margin-right:6px}
+.frow:hover{background:rgba(255,255,255,.05)}
+/* ---------- workspace ---------- */
+#files{flex:1;overflow-y:auto;padding:14px 18px;width:320px;flex-shrink:0;
+.fnode{display:flex;align-items:center;gap:14px;padding:8px 10px;border-radius:8px;
+  font-size:12px;color:var(--fg);cursor:pointer;user-select:none}
+.fnode:hover{background:var(--hover)}
+.fnode.sel{background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent)}
+.fnode .tw{width:12px;text-align:center;color:var(--dim);font-size:9px;flex-shrink:0}
+.fnode .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fnode .sz{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--dim);flex-shrink:0;margin-left:4px}
+.fkids{margin-left:14px;border-left:1px solid var(--border-soft);padding-left:4px}
+.fkids.hidden{display:none}
+#quickact .qact{display:block;width:100%;text-align:left;background:none;border:none;
+  color:var(--fg);font-size:11.5px;padding:7px 12px;border-radius:8px;cursor:pointer;transition:background .15s}
+#quickact .qact:hover{background:color-mix(in srgb,var(--accent) 15%,transparent);color:var(--accent)}
+/* media studio polish */
+#page-media .card{background:rgba(8,16,34,.18) !important;
+  border:1px solid rgba(255,255,255,.12) !important;border-radius:14px;
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  box-shadow:0 8px 24px -12px rgba(0,0,0,.5);transition:border-color .2s,transform .2s}
+#page-media .card:hover{border-color:color-mix(in srgb,var(--accent) 35%,var(--border-soft))}
+#page-persona .card,#page-persona .card .card{background:rgba(8,16,34,.18) !important;
+-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+border:1px solid rgba(255,255,255,.22) !important}
+#page-persona .card:hover{border-color:color-mix(in srgb,var(--accent) 30%,var(--border-soft))}
+#page-persona .card input,#page-persona .card select{background:rgba(10,20,42,.18) !important;
+-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+border:1px solid rgba(255,255,255,.14) !important}
+#page-persona #plportraitprev,#page-persona #plcamera{background:rgba(6,13,28,.12) !important;
+#page-persona #planim{background:rgba(3,7,16,.88) !important;
+-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+border:1px solid rgba(255,255,255,.18) !important}
+#page-persona #plthumbs>div{background:rgba(8,16,34,.22) !important}
+#page-persona .card input:focus,#page-persona .card select:focus{outline:none;border-color:var(--accent)}
+
+#page-media .card input{background:rgba(10,20,42,.16) !important;
+  border:1px solid rgba(255,255,255,.14) !important;border-radius:8px;color:var(--fg);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:border-color .2s}
+#page-media .card input:focus{outline:none;border-color:var(--accent)}
+#page-media .card .act{border-radius:9px;transition:filter .2s}
+#page-media .card .act:hover{filter:brightness(1.12)}
+#page-media .card{padding:18px !important}
+#page-media .card b{font-size:13px}
+#page-media .card input{font-size:12px !important;padding:9px 11px !important}
+#page-media .card .act{font-size:12px;padding:10px !important}
+#mediaprev{position:static;background:rgba(8,16,34,.20);border-color:rgba(255,255,255,.12)}
+.#page-media details.card{background:rgba(8,16,34,.16);border-color:rgba(255,255,255,.12) !important;}
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+#mediaprevbody{min-height:380px}
+#mediaoutpre{font-family:'IBM Plex Mono',monospace;line-height:1.6}
+#mediaprevimg,#mediaprevvid{box-shadow:0 12px 40px -12px rgba(0,0,0,.7)}
+  box-shadow:6px 0 28px -18px rgba(0,0,0,.4);display:flex;flex-direction:column}
+.fhead{display:flex;justify-content:space-between;align-items:center;
+  padding:2px 10px 10px;flex-shrink:0}
+.fhead span{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:1.5px;
+  text-transform:uppercase;color:var(--dim)}
+#filelist{flex:1;overflow-y:auto}
+.frow{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:10px;
+  cursor:pointer;font-size:12.5px;transition:.15s}
+.frow:hover{background:var(--hover)}
+.frow.sel{background:var(--accent);box-shadow:var(--lift)}
+.frow .sz{margin-left:auto;color:var(--dim);font-size:10.5px;
+  font-family:"IBM Plex Mono",monospace}
+#fileview{flex:1;display:flex;flex-direction:column;min-height:0}
+#fileview .fvbar{padding:10px 16px;
+  display:flex;gap:10px;align-items:center}
+#fileview textarea{flex:1;background:var(--code);color:var(--fg);border:none;
+  padding:16px;font-family:"IBM Plex Mono",monospace;font-size:12.5px;resize:none;outline:none}
+#runout{max-height:220px;overflow:auto;background:var(--code);padding:14px;
+  font-size:12px;display:none;white-space:pre-wrap;
+  font-family:"IBM Plex Mono",monospace}
+.hidden{display:none!important}
+
+/* ---------- settings ---------- */
+ .settingscol{flex:1;overflow-y:auto;padding:28px clamp(24px,4vw,56px);width:100%;
+  max-width:none}
+.settingscol h3{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:1.5px;
+  text-transform:uppercase;color:var(--accent);margin:30px 0 14px;
+  padding-bottom:8px;border-bottom:1px solid var(--border-soft)}
+.settingscol h3:first-child{margin-top:0}
+.settingscol .panelcard{background:color-mix(in srgb,var(--cardbg) 70%,transparent);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font-size:12px;color:var(--dim);margin-bottom:4px}
+label input,label select{width:100%;margin-top:5px}
+label input[type=checkbox]{width:auto}
+.panelcard{background:color-mix(in srgb,var(--cardbg) 70%,transparent);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border:1px solid var(--border-soft);border-radius:14px;box-shadow:var(--lift);
+  padding:12px 14px;margin-bottom:8px;font-size:12.5px}
+#statusjson{background:var(--code);padding:14px;border-radius:8px;font-size:11px;
+  overflow-x:auto;border:1px solid var(--border-soft);white-space:pre;
+  font-family:"IBM Plex Mono",monospace}
+.swatches{display:flex;gap:12px}
+.swatch{flex:1;display:flex;gap:11px;align-items:center;background:color-mix(in srgb,var(--cardbg) 70%,transparent);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border:1px solid var(--border-soft);border-radius:16px;padding:13px 15px;cursor:pointer;
+  transition:border-color .25s,box-shadow .25s}
+.swatch:hover{border-color:var(--accent)}
+.swatch.sel{border-color:var(--accent);box-shadow:var(--lift),
+  box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 22%,transparent)}
+.swatch input{width:auto}
+.swatch .dotc{width:24px;height:24px;border-radius:7px;flex-shrink:0;
+  border:1px solid var(--border-soft)}
+.swatch small{display:block;color:var(--dim);font-size:10px;
+  font-family:"IBM Plex Mono",monospace}
+.swatch b{font-size:13px}
+#vanta{filter:brightness(.48);background:
+  radial-gradient(120% 90% at 50% 0%,color-mix(in srgb,var(--accent) 14%,var(--bg)),var(--bg)),
+  radial-gradient(80% 60% at 85% 30%,color-mix(in srgb,var(--accent) 10%,transparent),transparent),
+  radial-gradient(70% 55% at 15% 75%,color-mix(in srgb,var(--accent) 8%,transparent),transparent)}
+[data-theme="light"] aside{background:var(--sidebar)}
+[data-theme="light"] .msg.assistant{background:var(--cardbg)}
+[data-theme="light"] .msg.user{background:var(--userbg)}
+[data-theme="light"] #composer{background:var(--cardbg)}
+[data-theme="light"] .chathead{background:var(--cardbg)}
+.msg .body button.roundbtn, .msg .roundbtn{display:none!important}
+@keyframes msgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.msg.user,.msg.assistant,.msg.sys{animation:msgIn .3s cubic-bezier(.2,.7,.3,1)}
+[data-theme="light"] aside{background:color-mix(in srgb,var(--sidebar) 55%,transparent)}
+[data-theme="light"] .msg.assistant{background:color-mix(in srgb,var(--cardbg) 68%,transparent)}
+[data-theme="light"] .msg.user{background:color-mix(in srgb,var(--userbg) 62%,transparent)}
+[data-theme="light"] #composer{background:color-mix(in srgb,var(--cardbg) 62%,transparent)}
+[data-theme="light"] .chathead{background:color-mix(in srgb,var(--cardbg) 58%,transparent)}
+[data-theme="light"] #settop{background:color-mix(in srgb,var(--cardbg) 45%,transparent)}
+</style>
+</head>
+<body>
+<div id="jserr" style="position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#5a1f1f;color:#ffd7d7;font:11px monospace;padding:4px 10px;display:none;white-space:pre-wrap"></div>
+<script>setTimeout(()=>{var d=document.getElementById('jserr');if(d&&window.__errs.length){d.style.display='block'}} ,3000)</script>
+<div id="vanta" style="position:fixed;inset:0;z-index:-1;pointer-events:none"></div>
+<div id="rune-watermark" style="position:fixed;inset:0;z-index:0;pointer-events:none;
+  user-select:none;display:flex;align-items:center;justify-content:center;
+  font-size:24vmin;letter-spacing:.04em;font-weight:700;line-height:1;transform:translateX(6vw);
+  color:color-mix(in srgb,var(--accent) 7%,transparent)">ᛗᛁᚨᛋᛗᚨ</div>
+<aside>
+  <div class="shead">
+    <div class="badge">ᛗ</div>
+    <div class="titles">
+      <div class="name">ᛗᛁᚨᛋᛗᚨ</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--dim);opacity:.55;margin-top:2px">MIASMA</div>
+    </div>
+    <span class="dot" id="netdot"></span>
+  </div>
+  <button id="newchat"><span>＋</span><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">New chat</span><span class="k">⌘ N</span></button>
+  <div class="nl" style="padding-top:18px">WORKSPACE</div>
+  <nav>
+    <button class="nav active" data-page="chat"><span class="ic">◈</span>Chat</button>
+    <button class="nav" data-page="workspace"><span class="ic">▤</span>Workspace</button>
+    <button class="nav" data-page="media"><span class="ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="m22 8-6 4 6 4z"/></svg></span>Media</button>
+    <button class="nav" data-page="persona"><span class="ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg></span>PersonaLive</button>
+  </nav>
+  <div class="nl">RECENT CONVERSATIONS</div>
+  <div id="chatlist"></div>
+  <div id="allchats"><span>All conversations</span><span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></div>
+  <div class="nl" style="padding-top:14px">MANAGE</div>
+  <nav style="padding-top:0">
+    <button class="nav" data-page="settings"><span class="ic">⚙</span>Settings</button>
+  </nav>
+  <div class="syscard" id="syscard">
+    <div class="st"><span style="display:flex;align-items:center;gap:8px"><i></i>SYSTEM AT EASE</span>
+      <button id="sysToggle" title="Hide system status">–</button></div>
+    <div class="sysrows">
+      <div class="sysrow" id="hw-cpu"><span>CPU</span><b class="val">–</b></div>
+      <div class="sysrow" id="hw-mem"><span>RAM</span><b class="val">–</b></div>
+      <div class="sysrow" id="hw-gpu"><span>VRAM</span><b class="val">–</b></div>
+    </div>
+  </div>
+  <div class="devfoot"><span>On this device</span><span>v0.9.4</span></div>
+  <a href="https://github.com/DewTechAI" target="_blank" rel="noopener"
+     style="display:flex;align-items:center;justify-content:center;gap:6px;margin:0 20px 16px;
+     padding:8px;border-radius:12px;border:1px solid var(--border-soft);background:var(--cardbg);
+     color:var(--dim);font-size:10px;letter-spacing:1px;text-decoration:none;
+     font-family:'IBM Plex Mono',monospace;transition:.25s">
+    <span>GitHub</span><span style="color:var(--accent)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span>
+  </a>
+</aside>
+<main>
+
+  <section class="page active" id="page-chat">
+    <div style="display:flex;flex:1;min-height:0;height:100%">
+    <div id="chatwrap" style="flex:1 1 auto;min-width:0">
+      <div id="chatcol">
+        <div class="hero">
+          <h2>A space to think, without the noise.</h2>
+          <p>Local models, your workspace, and tools — all on your device.</p>
+        </div>
+        <div class="chathead">
+          <span id="procbar"><span class="pulse"></span><span id="proctext">process</span><span id="procmod"></span></span>
+          <select id="modelpick" title="Model"><option value="">auto model</option></select>
+          <select id="provider" title="Routing"><option value="">Auto-route</option>
+            <option value="agent">Agent · tools</option></select>
+          <button class="ghost" id="clearchat">Clear</button>
+          <button class="ghost" id="resumebtn" title="Resume from checkpoint" style="display:none">▶ Resume</button>
+          <span style="flex:1"></span>
+          <button class="ghost" id="statuspill" style="display:flex;align-items:center;gap:7px">
+            <i style="width:6px;height:6px;border-radius:3px;background:var(--accent);display:inline-block"></i>local</button>
+                    <button class="ghost" id="dlmodbtn" style="display:inline-flex;align-items:center;gap:5px;padding:4px 9px;font-size:10.5px;white-space:nowrap">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span id="dltext">Download</span>
+          </button>
+        </div>
+        <div id="statuspop" style="display:none;position:relative">
+          <div id="statuspopbody" style="position:absolute;right:0;top:6px;z-index:50;
+            background:color-mix(in srgb,var(--cardbg) 60%,transparent);
+            -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+            border:1px solid var(--border-soft);border-radius:14px;
+            box-shadow:var(--lift);padding:14px 16px;min-width:240px;max-width:320px;
+            font-size:11.5px;font-family:'IBM Plex Mono',monospace;color:var(--dim);"></div>
+        </div>
+      </div>
+    </div>
+    <div id="chatpanel" style="display:flex;flex:0 0 320px;min-height:0;align-self:stretch;
+      margin:12px 12px 12px 0;border-radius:18px;flex-direction:column;
+      background:rgba(8,16,34,.24);
+      -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+      border:1px solid color-mix(in srgb,var(--accent) 30%,var(--border-soft));
+      box-shadow:0 20px 50px -20px rgba(0,0,0,.65);overflow:hidden;
+      transition:flex-basis .3s cubic-bezier(.4,0,.2,1),opacity .25s,margin .3s">
+      <div class="fhead" style="padding:12px 14px"><span>Workflow</span>
+        <button class="ghost" id="chatpanelclose" style="padding:3px 9px;font-size:10px">✕</button></div>
+      <div id="chatpanelbody" style="flex:1;overflow-y:auto;padding:12px 14px;font-size:11.5px;color:var(--dim);line-height:1.6">
+        <div style="font-size:10px;letter-spacing:.8px;color:var(--dim);margin-bottom:6px">MODULE STATUS</div>
+        <div id="cpmodules" style="margin-bottom:14px"></div>
+        <div style="font-size:10px;letter-spacing:.8px;color:var(--dim);margin-bottom:6px">QUICK ACTIONS</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <button class="ghost cpact" data-a="summarize" style="text-align:left;font-size:11px">Summarize last reply</button>
+          <button class="ghost cpact" data-a="explain" style="text-align:left;font-size:11px">Explain last reply</button>
+          <button class="ghost cpact" data-a="tasks" style="text-align:left;font-size:11px">Extract tasks</button>
+          <button class="ghost cpact" data-a="media" style="text-align:left;font-size:11px">Send to Media Studio</button>
+        </div>
+        <div style="margin-top:14px;font-size:10px;color:var(--dim)">
+          whisper-dark → obsidian-mind → void-weaver · one module in RAM at a time</div>
+      </div>
+    </div>
+    <button id="chatpanelbtn" title="Workflow panel" style="display:none;position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:60;border-radius:12px 0 0 12px;padding:14px 8px;font-size:11px;writing-mode:vertical-rl;background:rgba(8,16,34,.30);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);color:var(--fg);cursor:pointer">Workflow</button>
+    </div>
+    <button id="jumpdown" title="Jump to latest" style="display:none;position:fixed;bottom:122px;left:calc(50% + 6vw);
+  transform:translateX(-50%);z-index:60;width:38px;height:38px;border-radius:50%;
+  background:var(--cardbg);
+  border:1px solid var(--border-soft);color:var(--fg);cursor:pointer;
+  align-items:center;justify-content:center;box-shadow:var(--lift)">
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+</button>
+<div id="composerwrap">
+      <div id="composer">
+        <div id="chips" style="display:none;flex-wrap:wrap;gap:6px;margin-bottom:8px"></div>
+        <input id="prompt" placeholder="What did you do now..." autofocus>
+        <div class="cfoot">
+          <span class="hint">↵ to send · @file to attach</span>
+          <span class="sp"></span>
+          <button class="ghost" id="attachbtn" title="Attach text files">@</button>
+          <input type="file" id="filepick" multiple style="display:none">
+          <button class="ghost" id="autobtn" title="Auto — free RAM safely" style="color:var(--accent);border-color:color-mix(in srgb,var(--accent) 40%,transparent)">Auto</button>
+          <button class="ghost" id="panicbtn" title="Panic — kill all models & streams" style="color:var(--err);border-color:color-mix(in srgb,var(--err) 40%,transparent)">Panic</button>
+          <button id="stopbtn" title="Stop generation">■</button>
+          <button id="send" title="Send"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+        </div>
+      </div>
+      <div class="cnote">Only on your device. Always in your control.</div>
+    </div>
+  </section>
+
+  <section class="page" id="page-telemetry">
+    <div class="cards" id="cards"></div>
+    <div id="chartwrap"><canvas id="chart"></canvas></div>
+  </section>
+
+  <section class="page" id="page-workspace" style="flex-direction:column;overflow:hidden">
+    <div style="display:flex;flex:1;min-height:0;gap:14px;position:relative">
+      <div id="wstrigger" style="position:absolute;left:0;top:0;bottom:0;width:20px;z-index:5"></div>
+      <!-- inner left tree sidebar -->
+      <div id="wstree" style="flex:0 0 0px;display:flex;flex-direction:column;min-height:0;opacity:0;pointer-events:none;
+        background:rgba(8,16,34,.18);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+        border:1px solid rgba(255,255,255,.12);border-radius:14px;margin:12px 0 12px 12px;padding:12px;overflow:hidden;
+        transition:flex-basis .25s cubic-bezier(.4,0,.2,1),opacity .2s,padding .25s">
+        <div style="font-size:10px;letter-spacing:.8px;color:var(--dim);margin-bottom:8px">EXPLORER</div>
+        <input id="wstreesearch" placeholder="filter…" style="width:100%;font-size:11px;padding:6px 8px;margin-bottom:8px;background:rgba(10,20,42,.2);border:1px solid rgba(255,255,255,.14);border-radius:8px;color:var(--fg)">
+        <div style="display:flex;gap:6px;margin-bottom:8px">
+          <select id="wsroot" style="flex:1;font-size:11px;padding:6px 8px"></select>
+          <button class="ghost" id="wsdel" style="padding:4px 8px;font-size:10px;display:none">✕</button>
+        </div>
+        <div style="display:flex;gap:6px;margin-bottom:8px">
+          <input id="wsnew" placeholder="/path/to/folder" style="flex:1;font-size:11px;padding:6px 8px;background:rgba(10,20,42,.2);border:1px solid rgba(255,255,255,.14);border-radius:8px;color:var(--fg)">
+          <button class="ghost" id="wsadd" style="padding:4px 8px;font-size:10px">+</button>
+        </div>
+        <div id="wsstatus" style="font-size:10px;color:var(--dim);min-height:12px;margin-bottom:6px"></div>
+        <div id="filelist" style="flex:1;overflow-y:auto;font-size:11px"></div>
+      </div>
+      <!-- main content -->
+      <div style="flex:1;display:flex;flex-direction:column;min-width:0;padding:12px 16px 12px 4px;overflow-y:auto">
+        <div style="font-size:10px;letter-spacing:.8px;color:var(--dim);margin-bottom:8px">FOLDERS</div>
+        <div id="foldergrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:16px"></div>
+        <div style="font-size:10px;letter-spacing:.8px;color:var(--dim);margin-bottom:8px;margin-top:4px">FILES</div>
+        <div id="filetable" style="background:rgba(8,16,34,.18);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.12);border-radius:14px;overflow:hidden;flex:1"></div>
+        <div id="fileview" class="hidden" style="flex:1;display:flex;flex-direction:column;margin-top:12px">
+          <div class="fvbar">
+            <span id="curfile" style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--dim)"></span>
+            <span style="flex:1"></span>
+            <button class="ghost" id="savefile">Save</button>
+            <button class="act" id="runfile"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg> Run</button>
+          </div>
+          <textarea id="filecontent" spellcheck="false"></textarea>
+          <div id="runout" style="display:none;margin-top:8px;padding:10px;background:rgba(8,16,34,.25);border:1px solid rgba(255,255,255,.12);border-radius:8px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--dim);white-space:pre-wrap;max-height:200px;overflow-y:auto"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page" id="page-media" style="overflow-y:auto">
+    <div style="display:flex;gap:16px;align-items:stretch;height:100%;min-height:0">
+    <div id="mediamain" style="flex:1 1 auto;min-width:0;align-self:stretch;width:100%;max-width:none;margin:0 auto;padding:24px 28px 24px 28px;display:flex;flex-direction:column">
+      <h2 style="font-size:15px;margin-bottom:4px">Media Studio</h2>
+      <p style="font-size:11.5px;color:var(--dim);margin-bottom:16px">
+        Image, video, lip-sync & cinema workflows — powered by media_studio module.
+        Add API keys in <b>Settings → Media Studio API Keys</b> to auto-submit;
+        otherwise you get ready prompts.</p>
+      <details class="card" style="padding:12px 16px;margin-bottom:14px">
+        <summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--accent)">How Media Studio works — click to expand</summary>
+        <div style="font-size:11.5px;color:var(--dim);line-height:1.7;margin-top:8px">
+          <b style="color:var(--fg)">What it is:</b> a lightweight media workflow that builds
+          image, video, lip-sync, and cinema prompts via the <code>media_studio</code> module —
+          no heavy models load into RAM. If API keys are set in
+          <b>Settings → Media Studio API Keys</b>, prompts auto-submit to the provider
+          (Gemini / Vercel AI Gateway / Freepik); otherwise you get ready-to-paste prompts.
+          <br><br>
+          <b style="color:var(--fg)">The four tools:</b><br>
+          🖼 <b>Image prompt</b> — visuals, product shots, posters, concept art<br>
+          🎞 <b>Video prompt</b> — motion clips with camera-movement directions<br>
+          👄 <b>Lip sync</b> — character/voiceover lip-sync scene prompts<br>
+          🎬 <b>Cinema shot list</b> — camera angles, lenses, lighting & shot breakdowns
+          <br><br>
+          <b style="color:var(--fg)">PersonaLive</b> (optional module): live-portrait / lip-sync /
+          talking-head workflows via <code>persona_live</code> — set <code>PERSONALIVE_URL</code>
+          or vault <code>personalive_url</code> (default <code>127.0.0.1:7860</code>); mock-safe
+          when the service isn't running. See github.com/GVCLab/PersonaLive.
+        </div>
+      </details>
+      <div id="mediaprev" class="card" style="flex:1;min-height:40vh;display:flex;flex-direction:column;padding:0;overflow:hidden;margin-bottom:16px">
+        <div class="fhead" style="padding:10px 14px"><span>Preview</span>
+          <button class="ghost" id="mediacopy" style="padding:3px 9px;font-size:10px">Copy</button></div>
+        <div id="mediaprevbody" style="flex:1;display:flex;align-items:center;justify-content:center;padding:20px;overflow:auto">
+          <div id="mediaprevempty" style="color:var(--dim);font-size:12px;text-align:center">
+            <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" style="opacity:.4;margin-bottom:8px"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="m22 8-6 4 6 4z"/></svg><br>
+            No output yet — pick a studio card and generate.<br>
+            <span style="font-size:10px;opacity:.7">prompts & shot lists render here · media URLs display inline</span></div>
+          <pre id="mediaoutpre" style="display:none;font-size:11.5px;background:transparent;border:none;padding:0;overflow:auto;white-space:pre-wrap;color:var(--fg);width:100%"></pre>
+          <img id="mediaprevimg" style="display:none;max-width:100%;max-height:60vh;border-radius:10px" alt="preview">
+          <video id="mediaprevvid" style="display:none;max-width:100%;max-height:60vh;border-radius:10px" controls></video>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px">
+          <div class="card" style="padding:14px">
+            <b style="font-size:12px">Image prompt</b>
+            <input id="mi_subject" placeholder="subject (e.g. sneaker product)" style="width:100%;margin:8px 0;font-size:11px;padding:7px 9px">
+            <input id="mi_style" placeholder="style (optional)" style="width:100%;margin-bottom:8px;font-size:11px;padding:7px 9px">
+            <button class="act" id="mi_go" style="width:100%">Generate image prompt</button>
+          </div>
+          <div class="card" style="padding:14px">
+            <b style="font-size:12px">Video prompt</b>
+            <input id="mv_subject" placeholder="subject" style="width:100%;margin:8px 0;font-size:11px;padding:7px 9px">
+            <input id="mv_camera" placeholder="camera move (e.g. slow push-in)" style="width:100%;margin-bottom:8px;font-size:11px;padding:7px 9px">
+            <button class="act" id="mv_go" style="width:100%">Generate video prompt</button>
+          </div>
+          <div class="card" style="padding:14px">
+            <b style="font-size:12px">Lip sync</b>
+            <input id="ml_desc" placeholder="video description" style="width:100%;margin:8px 0;font-size:11px;padding:7px 9px">
+            <input id="ml_audio" placeholder="audio/voiceover (optional)" style="width:100%;margin-bottom:8px;font-size:11px;padding:7px 9px">
+            <button class="act" id="ml_go" style="width:100%">Build lip-sync prompt</button>
+          </div>
+          <div class="card" style="padding:14px">
+            <b style="font-size:12px">Cinema shot list</b>
+            <input id="ms_subject" placeholder="subject" style="width:100%;margin:8px 0;font-size:11px;padding:7px 9px">
+            <input id="ms_style" placeholder="style (e.g. product ad)" style="width:100%;margin-bottom:8px;font-size:11px;padding:7px 9px">
+            <button class="act" id="ms_go" style="width:100%">Build shot list</button>
+          </div>
+        </div>
+    </div>
+    <button class="act" id="mediadrawerbtn" style="position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:60;border-radius:12px 0 0 12px;padding:14px 8px;font-size:11px;writing-mode:vertical-rl">Module Chat</button>
+    <div id="mediadrawer" style="display:flex;flex:0 0 350px;min-height:0;align-self:stretch;margin:12px 12px 12px 0;
+      overflow:hidden;transition:flex-basis .3s cubic-bezier(.4,0,.2,1),margin .3s cubic-bezier(.4,0,.2,1),opacity .25s;
+      background:rgba(8,16,34,.24);
+      -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+      border:1px solid color-mix(in srgb,var(--accent) 30%,var(--border-soft));
+      border-radius:18px;flex-direction:column;
+      box-shadow:0 20px 50px -20px rgba(0,0,0,.65)">
+      <div class="fhead" style="padding:12px 14px"><span>Module Chat</span>
+        <button class="ghost" id="mediadrawerclose" style="padding:3px 9px;font-size:10px">✕</button></div>
+      <div style="padding:14px;display:flex;flex-direction:column;gap:10px">
+        <select id="mdmodel" style="font-size:12px;padding:9px 10px;border-radius:9px;background:color-mix(in srgb,var(--cardbg) 45%,rgba(10,18,34,.35));-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid var(--border-soft);color:var(--fg)"></select>
+        <textarea id="mdinput" rows="6" placeholder="describe the image/video/shot you want…"
+          style="font-size:12px;line-height:1.5;padding:11px 12px;border-radius:10px;background:color-mix(in srgb,var(--cardbg) 45%,rgba(10,18,34,.35));-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid var(--border-soft);color:var(--fg);resize:vertical;min-height:110px"></textarea>
+        <button class="act" id="mdsend" style="width:100%">Generate with module</button>
+      </div>
+      <div id="mdout" style="flex:1;overflow-y:auto;padding:4px 16px 16px;font-size:12px;line-height:1.6;white-space:pre-wrap;color:var(--fg)"></div>
+      <div style="padding:12px 14px;border-top:1px solid var(--border-soft);display:flex;gap:10px">
+        <button class="ghost" id="mdtostudio" style="flex:1;font-size:10.5px">Send to Preview</button>
+        <button class="ghost" id="mdcopy" style="flex:1;font-size:10.5px">Copy</button>
+      </div>
+    </div>
+    </div>
+  </section>
+  <section class="page" id="page-persona" style="overflow-y:auto;background:transparent">
+    <div style="max-width:none;margin:0;padding:8px 4px 40px;width:100%">
+      <h2 style="font-size:15px;margin-bottom:4px">PersonaLive</h2>
+      <p style="font-size:11.5px;color:var(--dim);margin-bottom:16px">
+        Real-time portrait / lip-sync / talking-head workflows via the <code>persona_live</code> module.
+        Service: <code id="plsvc">…</code> · status: <b id="plstat">checking…</b></p>
+      <div style="display:grid;grid-template-columns:minmax(300px,380px) 1fr;gap:14px;margin-bottom:14px">
+        <!-- LEFT COLUMN -->
+        <div style="display:flex;flex-direction:column;gap:14px;min-width:0">
+          <div class="card" style="padding:16px">
+            <div style="font-size:11px;letter-spacing:.8px;color:var(--dim);margin-bottom:8px">PORTRAIT</div>
+            <div style="display:flex;gap:5px;margin-bottom:8px" id="plthumbs">
+              <div style="width:44px;height:44px;border-radius:8px;background:rgba(6,13,28,.14);border:1px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;color:var(--dim);font-size:9px">p1</div>
+              <div style="width:44px;height:44px;border-radius:8px;background:rgba(6,13,28,.14);border:1px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;color:var(--dim);font-size:9px">p2</div>
+              <div style="width:44px;height:44px;border-radius:8px;background:rgba(6,13,28,.14);border:1px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;color:var(--dim);font-size:9px">p3</div>
+            </div>
+            <div id="plportraitprev" style="height:170px;border-radius:10px;background:rgba(6,13,28,.12);border:1px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;color:var(--dim);font-size:11px;margin-bottom:10px">no portrait loaded</div>
+            <input id="plportraitfile" type="file" accept="image/*" style="display:none">
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <button class="ghost" id="plupload" style="font-size:11px;padding:6px 10px">Upload</button>
+              <select id="plsample" style="flex:1;font-size:11px;background:rgba(10,20,42,.14);border:1px solid rgba(255,255,255,.18);border-radius:8px;color:var(--fg);padding:6px">
+                <option value="">sample presets…</option>
+                <option value="professional headshot">professional headshot</option>
+                <option value="cinematic portrait">cinematic portrait</option>
+                <option value="anime avatar">anime avatar</option>
+                <option value="news anchor">news anchor</option>
+              </select>
+            </div>
+          </div>
+          <div class="card" style="padding:16px;flex:1;display:flex;flex-direction:column">
+            <div style="font-size:11px;letter-spacing:.8px;color:var(--dim);margin-bottom:8px">CAMERA</div>
+            <div style="flex:1;min-height:220px;border-radius:10px;background:rgba(6,13,28,.12);border:1px solid rgba(255,255,255,.18);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--dim);font-size:11px;margin-bottom:10px">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="opacity:.5"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+              camera preview</div>
+            <select id="plcamera" style="width:100%;font-size:11px;background:rgba(10,20,42,.14);border:1px solid rgba(255,255,255,.18);border-radius:8px;color:var(--fg);padding:8px">
+              <option value="webcam">Webcam</option>
+              <option value="portrait">Portrait stream</option>
+              <option value="virtual">Virtual camera</option>
+            </select>
+          </div>
+        </div>
+        <!-- RIGHT COLUMN -->
+        <div style="display:flex;flex-direction:column;gap:14px;min-width:0">
+          <div class="card" style="padding:16px;flex:1;display:flex;flex-direction:column">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+              <span style="font-size:11px;letter-spacing:.8px;color:var(--dim)">ANIMATION</span>
+              <span style="font-size:10px;color:var(--dim)">live stage</span>
+            </div>
+            <div id="planim" style="flex:1;min-height:52vh;border-radius:12px;background:rgba(6,13,28,.12);border:1px solid rgba(255,255,255,.18);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--dim);font-size:11px">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="opacity:.45"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="m10 9 5 3-5 3z"/><path d="M8 22h8"/></svg>
+              <span>animation output — press Start</span></div>
+          </div>
+          <div class="card" style="padding:12px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+            <div style="flex:1;min-width:160px">
+              <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--dim);margin-bottom:2px"><span>Driving FPS</span><b id="plfpsv" style="color:var(--accent)">25</b></div>
+              <input id="plfps" type="range" min="1" max="60" value="25" style="width:100%">
+            </div>
+            <div style="display:flex;gap:8px">
+              <button class="act" id="plfuse" style="font-size:12px;padding:9px 16px">Fuse</button>
+              <button class="act" id="plstart" style="font-size:12px;padding:9px 16px">Start</button>
+              <button class="ghost" id="plreset" style="font-size:12px;padding:9px 16px">Reset</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="padding:14px 16px;margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <span style="font-size:10px;letter-spacing:.8px;color:var(--dim)">OUTPUT / PROMPTS</span>
+          <button class="ghost" id="plcopy" style="font-size:10px;padding:3px 9px">Copy</button>
+        </div>
+        <div id="plout" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--dim);white-space:pre-wrap;min-height:70px;max-height:260px;overflow-y:auto">ready — pick a preset or press Start</div>
+      </div>
+      <p style="font-size:10.5px;color:var(--dim);margin-top:14px">
+        ⚠ Requires a dedicated GPU — NVIDIA RTX 40/50 series recommended for real-time performance.
+        Without the service running, controls produce ready prompts (mock-safe).</p>
+    </div>
+  </section>
+  <section class="page" id="page-settings">
+    <div class="settingscol">
+      <div id="settop" style="position:sticky;top:0;z-index:30;display:flex;gap:10px;
+        align-items:center;padding:10px 0;margin-bottom:8px;
+        background:var(--cardbg);
+        border:1px solid var(--border-soft);border-radius:14px;
+        padding:8px 14px;margin:6px 0 14px;box-shadow:var(--lift)">
+        <button class="topbtn" onclick="openHelp()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.4 2.3c-.8.4-1.4 1-1.4 1.9v.3"/><circle cx="12" cy="17" r=".6" fill="currentColor"/></svg>Help</button>
+        <button class="topbtn" onclick="openGuide()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Module guide</button>
+        <button class="topbtn" onclick="openGuide()" style="border-color:color-mix(in srgb,var(--accent) 55%,var(--border-soft))"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg>Model download</button>
+        <a href="https://github.com/DewTechAI" target="_blank" rel="noopener noreferrer"
+           class="ghost" style="display:flex;align-items:center;gap:7px;text-decoration:none;
+           color:var(--fg)">
+          <span>GitHub</span><span style="color:var(--accent)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span></a>
+      </div>
+      <h3>Appearance</h3>
+      <label style="display:flex;gap:8px;align-items:center;margin-top:16px;color:var(--fg)">
+        <input type="checkbox" id="syscardtoggle" style="width:auto">
+        Show “SYSTEM AT EASE” status card (CPU · RAM · VRAM)
+      </label>
+      <p style="color:var(--dim);font-size:11px;margin-top:8px;font-family:'IBM Plex Mono',monospace">
+        Saved automatically across sessions.</p>
+
+      <h3>AI Provider Configuration</h3>
+      <p style="color:var(--dim);font-size:11.5px;margin-bottom:10px">
+        Connect any OpenAI-compatible provider (Groq, Google AI, OpenAI, local endpoints…).
+        Configured providers appear in the chat routing dropdown.</p>
+      <div id="customprovs"></div>
+      <div class="panelcard" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <label style="margin:0">Name<input id="pname" placeholder="groq" style="margin-top:4px"></label>
+        <label style="margin:0">Default model<input id="pmodel" placeholder="llama-3.3-70b" style="margin-top:4px"></label>
+        <label style="margin:0;grid-column:1/-1">Base URL<input id="pbase" placeholder="https://api.groq.com/openai/v1" style="margin-top:4px"></label>
+        <label style="margin:0;grid-column:1/-1">API key
+          <span style="display:flex;gap:8px;margin-top:4px">
+            <input id="pkey" type="password" placeholder="gsk_…" style="flex:1">
+            <button class="ghost" id="pkeyeye" type="button" style="padding:0 12px">Show</button>
+          </span></label>
+        <div style="grid-column:1/-1;display:flex;gap:10px">
+          <button class="act" id="psave" style="flex:1">Save provider</button>
+          <button class="ghost" id="ptest">Test</button>
+        </div>
+        <div id="pstatus" style="grid-column:1/-1;font-size:11px;color:var(--dim);"></div>
+      </div>
+
+
+      <h3>Media Studio API Keys</h3>
+      <p style="color:var(--dim);font-size:11.5px;margin-bottom:10px">
+        Keys for image/video/lip-sync generation (open-higgsfield providers).
+        Saved keys apply immediately — no restart needed.</p>
+      <div class="panelcard" style="display:flex;flex-direction:column;gap:10px" id="mediakeys">
+      </div>
+
+      <h3>Models</h3>
+      <label>Default local model<input id="localmodel"></label>
+      <label style="margin-top:10px">Coding model<input id="codingmodel"></label>
+      <label style="margin-top:10px">Reasoning model<input id="reasoningmodel"></label>
+      <label style="margin-top:10px">Cloud model<input id="cloudmodel"></label>
+      <label style="display:flex;gap:8px;align-items:center;margin-top:16px;color:var(--fg)">
+        <input type="checkbox" id="autorun"> Auto-run Python code blocks in sandbox
+      </label>
+      <button class="act" id="savesettings" style="margin-top:16px">Save settings</button>
+      <h3>Module routing</h3>
+      <p style="color:var(--dim);font-size:11.5px;margin-bottom:8px">
+        Choose which modules handle each task type. Leave all unchecked for auto-select.
+      </p>
+      <div id="modprefs"></div>
+      <h3>Modules</h3>
+      <div id="modules"></div>
+      <button class="ghost" id="rescan" style="margin-top:8px">Rescan modules</button>
+      <h3>Access</h3>
+      <label>Auth token (if server requires one)
+        <input id="authtoken" type="password" placeholder="••••••••"></label>
+      <button class="act" id="savtoken" style="margin-top:8px">Save token</button>
+      <h3>Status</h3>
+      <pre id="statusjson"></pre>
+    </div>
+  </section>
+</main>
+<div id="delmodal" style="display:none;position:fixed;inset:0;z-index:110;
+  align-items:center;justify-content:center;padding:24px">
+  <div style="position:absolute;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(6px)"></div>
+  <div style="position:relative;width:min(400px,100%);
+    background:color-mix(in srgb,var(--cardbg) 82%,transparent);
+    -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+    border:1px solid var(--border-soft);border-radius:18px;padding:24px 26px;
+    box-shadow:var(--lift)">
+    <b style="font-size:15px">Delete chat?</b>
+    <p id="deltitle" style="font-size:12.5px;color:var(--dim);margin:8px 0 18px;
+      font-family:'IBM Plex Mono',monospace"></p>
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button class="ghost" id="delcancel">Cancel</button>
+      <button class="ghost" id="delyes" style="color:var(--err);border-color:color-mix(in srgb,var(--err) 40%,transparent)">Delete</button>
+    </div>
+  </div>
+</div>
+<div id="redalert" style="display:none;position:fixed;inset:0;z-index:120;
+  align-items:center;justify-content:center;padding:24px">
+  <div style="position:absolute;inset:0;background:rgba(120,10,10,.45);backdrop-filter:blur(6px)"></div>
+  <div style="position:relative;width:min(440px,100%);
+    background:color-mix(in srgb,var(--cardbg) 85%,transparent);
+    -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+    border:2px solid var(--err);border-radius:18px;padding:24px 26px;box-shadow:var(--lift)">
+    <b style="font-size:15px;color:var(--err)">⚠ Red alert — download warning</b>
+    <p style="font-size:12.5px;line-height:1.7;color:var(--fg);margin:10px 0">
+      Downloads <b>cannot be cleanly paused</b> midway. If interrupted, they will most
+      likely <b>restart from the beginning</b> next time — though you may get lucky and
+      resume near where you stopped, depending on connection stability.</p>
+    <p class="rnames" style="font-family:'IBM Plex Mono',monospace;font-size:11px;
+      color:var(--dim)"></p>
+    <div id="dlprog" style="margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--dim);display:flex;flex-direction:column;gap:4px;max-height:180px;overflow-y:auto"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px">
+      <button class="ghost" onclick="document.getElementById('redalert').style.display='none'">Cancel</button>
+      <button class="ghost" id="redyes" style="color:#fff;background:var(--err);border:none">Start download</button>
+    </div>
+  </div>
+</div>
+<div id="firstmodal" style="display:none;position:fixed;inset:0;z-index:200;align-items:center;justify-content:center;background:rgba(3,6,14,.78);backdrop-filter:blur(8px)">
+  <div style="width:min(560px,94vw);max-height:88vh;display:flex;flex-direction:column;background:rgba(8,16,34,.94);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.16);border-radius:18px;padding:24px 28px;box-shadow:0 30px 80px -20px rgba(0,0,0,.85);animation:msgIn .3s cubic-bezier(.2,.7,.3,1)">
+    <div style="font-size:16px;font-weight:600">Terms &amp; Conditions</div>
+    <div style="font-size:10px;letter-spacing:2px;color:var(--dim);margin:2px 0 14px">REQUIRED BEFORE FIRST USE</div>
+    <div id="termstext" style="flex:1;overflow-y:auto;font-size:12px;line-height:1.75;color:var(--fg);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px;background:rgba(6,13,28,.35);margin-bottom:14px">
+      <p style="color:var(--accent);font-size:10px;letter-spacing:1.5px;margin-bottom:4px">✓ ADVANTAGES</p>
+      <p><b>Unlimited local tokens</b> — modules run on your machine with no per-token billing, rate caps, or cloud limits.</p>
+      <p><b>Privacy-first</b> — code, files, and conversations stay on your device; no external cloud dependency.</p>
+      <p><b>Smart memory</b> — lazy first-use loading, one module in RAM at a time; ultra-light options for 4GB systems.</p>
+      <p style="color:var(--err);font-size:10px;letter-spacing:1.5px;margin:10px 0 4px">⚠ LIMITATIONS &amp; RISKS</p>
+      <p><b>Hardware-bound</b> — speed depends on your CPU/RAM/cooling; large models on weak hardware can lag, freeze, or throttle.</p>
+      <p><b>Manual downloads</b> — models are not bundled; pull them via the Download button before first use.</p>
+      <p><b>Tiny-model trade-offs</b> — 4GB-friendly modules have smaller context and shallower reasoning than large models.</p>
+      <p style="color:var(--dim);font-size:10px;letter-spacing:1.5px;margin:10px 0 4px">§ LEGAL &amp; LIABILITY</p>
+      <p><b>License.</b> Apache License 2.0 — illegal, harmful, malicious, or abusive use is strictly prohibited and terminates your rights.</p>
+      <p><b>Zero liability.</b> Running beyond your hardware limits is at your own risk; no liability for crashes, wear, or data loss.</p>
+    </div>
+    <label id="termscheckrow" style="display:flex;gap:9px;align-items:flex-start;font-size:11.5px;color:var(--fg);cursor:pointer;margin-bottom:14px">
+      <input type="checkbox" id="termscheck" style="margin-top:2px;accent-color:var(--accent)">
+      <span>I have read and agree to the Terms &amp; Conditions and Apache 2.0 License restrictions</span>
+    </label>
+    <button class="act" id="firstok" disabled style="width:100%;padding:11px;font-size:12.5px;opacity:.45;cursor:not-allowed">Accept &amp; Enter</button>
+  </div>
+</div>
+</div>
+<div id="notemodal" style="display:none;position:fixed;inset:0;z-index:190;align-items:center;justify-content:center;background:rgba(3,6,14,.7);backdrop-filter:blur(6px)">
+  <div style="width:min(460px,92vw);background:rgba(8,16,34,.93);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:24px 28px;box-shadow:0 30px 80px -20px rgba(0,0,0,.85);animation:msgIn .3s cubic-bezier(.2,.7,.3,1)">
+    <div style="font-size:15px;font-weight:600;margin-bottom:4px">Quick Note</div>
+    <div style="font-size:10px;letter-spacing:2px;color:var(--dim);margin-bottom:14px">DEVELOPER NOTE</div>
+    <div style="font-size:12px;line-height:1.75;color:var(--fg);display:flex;flex-direction:column;gap:9px">
+      <p><b>Lazy loading.</b> Modules load only on first use — one in RAM at a time, so startup stays light. On 4GB RAM, prefer ultra-light models.</p>
+      <p><b>Required downloads.</b> Modules are not bundled — required ones must be pulled via Download before first use (Windows CMD/PowerShell or Linux, same commands). Local-only, no personal paths needed.</p>
+      <p><b>Next:</b> the module check runs automatically — install what you need via Download.</p>
+    </div>
+    <button class="act" id="noteok" style="margin-top:16px;width:100%;padding:10px;font-size:12.5px">Continue to Module Setup →</button>
+  </div>
+</div>
+<div id="note2modal" style="display:none;position:fixed;inset:0;z-index:185;align-items:center;justify-content:center;background:rgba(3,6,14,.7);backdrop-filter:blur(6px)">
+  <div style="width:min(460px,92vw);background:rgba(8,16,34,.93);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:24px 28px;box-shadow:0 30px 80px -20px rgba(0,0,0,.85);animation:msgIn .3s cubic-bezier(.2,.7,.3,1)">
+    <div style="font-size:15px;font-weight:600;margin-bottom:4px">Almost there</div>
+    <div style="font-size:10px;letter-spacing:2px;color:var(--dim);margin-bottom:14px">MODULES NOTE</div>
+    <div style="font-size:12px;line-height:1.75;color:var(--fg);display:flex;flex-direction:column;gap:9px">
+      <p><b>Lazy modules.</b> Modules load only on first use — one in RAM at a time. 4GB machines: use Tiny models.</p>
+      <p><b>Required downloads.</b> Modules are not bundled — required ones must be pulled via Download before first use (Windows CMD/PowerShell or Linux, verified links, safe fallbacks).</p>
+    </div>
+    <button class="act" id="note2ok" style="margin-top:16px;width:100%;padding:10px;font-size:12.5px">Auto Scan Modules</button>
+  </div>
+</div>
+<div id="guidemodal" style="display:none;position:fixed;inset:0;z-index:110;
+  align-items:center;justify-content:center;padding:24px">
+  <div style="position:absolute;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(6px)"></div>
+  <div style="position:relative;width:min(540px,100%);max-height:85vh;overflow-y:auto;
+    background:color-mix(in srgb,var(--cardbg) 82%,transparent);
+    -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+    border:1px solid var(--border-soft);border-radius:18px;padding:26px 28px;box-shadow:var(--lift)">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+      <b style="font-size:15px">Module guide</b>
+      <button class="ghost" onclick="document.getElementById('guidemodal').style.display='none'"
+        style="margin-left:auto;padding:4px 10px">✕</button>
+    </div>
+    <div style="font-size:13px;line-height:1.7;color:var(--fg)">
+      <p>No models installed? Visit <b>github.com/DewTechAI</b> (or the Ollama library)
+      and pick a model that fits your setup — ᛗᛁᚨᛋᛗᚨ works with any downloaded model,
+      local or cloud.</p>
+      <p><button class="ghost" id="autoscan" style="display:inline-flex;align-items:center;gap:7px">
+        ⚙ Auto model — scan this machine</button></p>
+      <div id="scanresult" style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;
+        color:var(--dim);margin-top:8px;white-space:pre-wrap"></div>
+      <div id="modcat" style="margin-top:12px"></div>
+      <div id="pulltotal" style="font-family:'IBM Plex Mono',monospace;font-size:11px;
+        color:var(--accent);margin-top:8px"></div>
+      <div id="dlpanel" style="display:none;margin-top:10px;border:1px solid var(--border-soft);border-radius:12px;padding:10px 12px;background:rgba(6,13,28,.3)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <span style="font-size:10px;letter-spacing:1px;color:var(--dim)">ACTIVE DOWNLOADS</span>
+          <button class="ghost" id="dlclear" style="padding:2px 8px;font-size:9px">clear</button>
+        </div>
+        <div id="dlrows" style="display:flex;flex-direction:column;gap:4px;font-family:'IBM Plex Mono',monospace;font-size:11px"></div>
+      </div>
+      <div id="notifpanel" style="margin-top:10px;border:1px solid var(--border-soft);border-radius:12px;padding:10px 12px;background:rgba(6,13,28,.3)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <span style="font-size:10px;letter-spacing:1px;color:var(--dim)">ALERT HISTORY</span>
+          <button class="ghost" id="notifclear" style="padding:2px 8px;font-size:9px">clear</button>
+        </div>
+        <div id="notiflist" style="display:flex;flex-direction:column;gap:4px;font-size:10.5px;max-height:140px;overflow-y:auto"></div>
+      </div>
+      <button class="ghost" id="pullgo" style="display:none;margin-top:10px;color:var(--err);
+        border-color:color-mix(in srgb,var(--err) 40%,transparent)">⬇ Auto-download &amp; install selected</button>
+      <p style="border-top:1px solid var(--border-soft);padding-top:12px;margin-top:14px;
+        font-size:12px;color:var(--dim)">
+      This guide currently covers <b>50 popular models</b> and also supports
+      <b>custom models you create yourself</b>.</p>
+      <p style="font-size:11px;color:var(--dim);margin-top:8px">Model sources:
+        <a href="https://github.com/ollama/ollama" target="_blank" rel="noopener" style="color:var(--accent)">Ollama</a> ·
+        <a href="https://github.com/QwenLM/Qwen2.5" target="_blank" rel="noopener" style="color:var(--accent)">Qwen</a> ·
+        <a href="https://github.com/huggingface/smollm" target="_blank" rel="noopener" style="color:var(--accent)">SmolLM</a> ·
+        <a href="https://github.com/meta-llama/llama-models" target="_blank" rel="noopener" style="color:var(--accent)">Llama</a> ·
+        <a href="https://github.com/google-gemma" target="_blank" rel="noopener" style="color:var(--accent)">Gemma</a> ·
+        <a href="https://github.com/GVCLab/PersonaLive" target="_blank" rel="noopener" style="color:var(--accent)">PersonaLive</a></p>
+    </div>
+  </div>
+</div>
+<div id="quickact" style="display:none;position:fixed;z-index:120;
+  background:color-mix(in srgb,var(--cardbg) 90%,transparent);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  border:1px solid color-mix(in srgb,var(--accent) 30%,var(--border-soft));
+  border-radius:12px;padding:6px;box-shadow:var(--lift);flex-direction:column;gap:2px">
+  <button class="qact" data-a="summarize">Summarize</button>
+  <button class="qact" data-a="explain">Explain</button>
+  <button class="qact" data-a="rewrite">Rewrite / Polish</button>
+  <button class="qact" data-a="tasks">Extract tasks</button>
+  <button class="qact" data-a="media">Send to Media Studio</button>
+</div>
+<div id="permmodal" style="display:none;position:fixed;inset:0;z-index:115;
+  align-items:center;justify-content:center;padding:24px">
+  <div style="position:absolute;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(6px)"></div>
+  <div style="position:relative;width:min(480px,100%);
+    background:color-mix(in srgb,var(--cardbg) 85%,transparent);
+    -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+    border:1px solid color-mix(in srgb,var(--accent) 30%,var(--border-soft));
+    border-radius:18px;padding:24px 26px;box-shadow:var(--lift)">
+    <b style="font-size:14px">Shell permission requested</b>
+    <p style="font-size:11px;color:var(--dim);font-family:'IBM Plex Mono',monospace;
+      margin:6px 0 10px">run a command in the workspace</p>
+    <pre id="permcmd" style="font-size:11.5px;background:var(--code);border:1px solid var(--border-soft);
+      border-radius:8px;padding:10px;overflow-x:auto;white-space:pre-wrap;color:var(--fg)"></pre>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap">
+      <button class="topbtn" data-p="never" style="border-color:color-mix(in srgb,var(--err) 45%,transparent);color:var(--err)">Never</button>
+      <button class="topbtn" data-p="once">This time only</button>
+      <button class="topbtn" data-p="always" style="border-color:color-mix(in srgb,var(--accent) 55%,var(--border-soft))">Always</button>
+    </div>
+  </div>
+</div>
+<div id="helpmodal" style="display:none;position:fixed;inset:0;z-index:100;
+  align-items:center;justify-content:center;padding:24px">
+  <div style="position:absolute;inset:0;background:rgba(0,0,0,.35);
+    backdrop-filter:blur(6px)"></div>
+  <div style="position:relative;width:min(560px,100%);max-height:85vh;overflow-y:auto;
+    background:color-mix(in srgb,var(--cardbg) 78%,transparent);
+    -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+    border:1px solid var(--border-soft);border-radius:20px;padding:28px 30px;
+    box-shadow:var(--lift)">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <span style="width:34px;height:34px;border-radius:10px;background:var(--cardbg);
+        border:1px solid var(--border-soft);display:flex;align-items:center;justify-content:center;
+        font-weight:700;color:var(--accent)">ᛗ</span>
+      <div><b style="font-size:16px">ᛗᛁᚨᛋᛗᚨ · Getting started</b>
+      <div style="font-size:11px;color:var(--dim);font-family:'IBM Plex Mono',monospace">first-run guide</div></div>
+      <button class="ghost" id="helpclose" style="margin-left:auto;padding:5px 12px">✕</button>
+    </div>
+    <div style="font-size:13px;line-height:1.7;color:var(--fg)">
+      <p><b>No models found yet?</b> You can install and pull open-source models with tools like
+      <b>Ollama</b> — downloaded models follow the standard guidelines/policies of their sources.
+      Models you train or build yourself are not restricted by those download policies and are
+      not blocked here.</p>
+      <p>This version focuses on <b>text models</b>; a future release will add image generation.</p>
+      <p>Choose models suited to your <b>RAM, CPU, and GPU</b> — ᛗᛁᚨᛋᛗᚨ can still handle and
+      control even very large models.</p>
+      <p>Any downloaded model can be connected — including massive ones such as
+      <b>Kimi K3</b> (~2.8T total / ~50B active), <b>DeepSeek-V4 Pro</b> (1.6T),
+      <b>GLM-5.2</b> (744B MoE), <b>Nemotron 3 Ultra</b> (550B), and <b>MiniMax M3</b>.</p>
+      <p>There is <b>no token limit</b> imposed by the app — full capabilities tailored to the
+      connected model: app development, single tasks, and multi-step workflows, locally or via
+      cloud setups with API keys.</p>
+      <p style="border-top:1px solid var(--border-soft);padding-top:12px;margin-top:12px">
+      <b>Developer note:</b> this version may still have errors or bugs — the full
+      all-platform experience is under active development. It is not free right now, but the
+      developer is actively working to make it available for free.</p>
+      <p><b>Note:</b> the <b>Auto</b> button frees RAM by unloading idle models —
+      the screen may become slightly dimmer while it runs, and your already-open
+      apps are never affected or closed.</p>
+      <p>If you run into any issue or error, please post a message/issue on GitHub:
+      <a href="https://github.com/DewTechAI" target="_blank" rel="noopener"
+         style="color:var(--accent)">github.com/DewTechAI <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></p>
+    </div>
+  </div>
+</div>
+<script>
+const $ = s => document.querySelector(s);
+let _forceScroll = false;
+function nearBottom(){ const w=$('#chatwrap'); return w.scrollTop + w.clientHeight >= w.scrollHeight - 80; }
+function updateJumpBtn(){ const b=$('#jumpdown'); if(!b) return;
+  b.style.display = (!nearBottom() && $('#page-chat').classList.contains('active')) ? 'flex' : 'none'; }
+$('#jumpdown').onclick = () => { const w=$('#chatwrap'); w.scrollTo({top:1e9,behavior:'smooth'}); setTimeout(updateJumpBtn,350); };
+$('#chatwrap').addEventListener('scroll', updateJumpBtn, {passive:true});
+function smartScroll(force){
+  const w = $('#chatwrap');
+  if (force || _forceScroll || nearBottom()) w.scrollTop = 1e9;
+  document.querySelector('.chathead').classList.toggle('scrolled', w.scrollTop > 40);
+  updateJumpBtn();
+}
+const TOKEN = localStorage.getItem('mai_token') || '';
+const api = async (p, opt = {}) => {
+  opt.headers = Object.assign({'Authorization': 'Bearer ' + TOKEN}, opt.headers || {});
+  const r = await fetch(p, opt);
+  if (r.status === 401) { alert('Unauthorized — set your access token in Settings.'); throw new Error('401'); }
+  return r.json();
+};
+const wsUrl = p => `ws://${location.host}${p}${TOKEN ? '?token=' + encodeURIComponent(TOKEN) : ''}`;
+let session = localStorage.getItem('mai_session') || 'main';
+let busy = false, HOSTNAME = '', activeSock = null;
+
+// ---------- theme & accent ----------
+(function initTheme(){
+  // theme locked: Abyssal Blue + Dark mode, always
+  localStorage.setItem('mai_theme','dark'); localStorage.setItem('mai_accent','blue');
+  const saved = 'dark';
+  const light = saved ? saved==='light' : window.matchMedia('(prefers-color-scheme: light)').matches;
+  document.documentElement.dataset.theme = light ? 'light' : 'dark';
+  const accent = 'blue';
+  document.documentElement.dataset.accent = accent;
+  const paintAccent = () => document.querySelectorAll('#accentsel input').forEach(r =>
+    r.checked = r.value === document.documentElement.dataset.accent);
+  window.setAccent = () => {}; // locked
+  window.setTheme = () => {}; // locked
+  const paintTheme = () => {
+    const _tb2=$('#themebtn');if(_tb2)_tb2.innerHTML = document.documentElement.dataset.theme==='light' ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>' : '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>';
+    const _tl=$('#themelight'),_td=$('#themedark');if(_tl)_tl.style.opacity=document.documentElement.dataset.theme==='light'?'.5':'1';if(_td)_td.style.opacity=document.documentElement.dataset.theme==='dark'?'.5':'1';
+  };
+  paintTheme(); paintAccent();
+  initVanta();
+  document.querySelectorAll('#accentsel input').forEach(r =>
+    r.onchange = () => { if (r.checked) window.setAccent(r.value); });
+  const _tl2=$('#themelight'),_td2=$('#themedark');if(_tl2)_tl2.onclick=()=>window.setTheme('light');if(_td2)_td2.onclick=()=>window.setTheme('dark');
+  const syscard = document.getElementById('syscard');
+  const sysToggle = document.getElementById('sysToggle');
+  const paintSys = () => {
+    const hid = localStorage.getItem('mai_syscard') === '0';
+    syscard.classList.toggle('collapsed', hid);
+    sysToggle.textContent = hid ? '+' : '–';
+    const cb = document.getElementById('syscardtoggle');
+    if (cb) cb.checked = !hid;
+  };
+  window.setSysCard = show => {
+    localStorage.setItem('mai_syscard', show ? '1' : '0');
+    paintSys();
+  };
+  sysToggle.onclick = () => window.setSysCard(syscard.classList.contains('collapsed'));
+  paintSys();
+  const syscb = document.getElementById('syscardtoggle');
+  if (syscb) syscb.onchange = () => window.setSysCard(syscb.checked);
+})();
+
+// ---------- Global dropdown contrast enforcement ----------
+function fixDropdowns(){
+  document.querySelectorAll('select').forEach(sel=>{
+    sel.style.setProperty('background','#071022','important');
+    sel.style.setProperty('color','#eef4ff','important');
+    sel.style.setProperty('border','1px solid rgba(148,185,255,.25)','important');
+    sel.querySelectorAll('option').forEach(opt=>{
+      opt.style.setProperty('background','#071022','important');
+      opt.style.setProperty('color','#eef4ff','important');
+    });
+  });
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fixDropdowns);else fixDropdowns();
+new MutationObserver(()=>fixDropdowns()).observe(document.body,{childList:true,subtree:true});
+
+$('#dlmodbtn').onclick = async () => {
+  const btn=$('#dlmodbtn'), t=$('#dltext');
+  const sel=($('#modelpick')&&$('#modelpick').value)||'';
+  const mods=await api('/api/models').catch(()=>[]);
+  const arr=Array.isArray(mods)?mods:(mods&&(mods.models||mods.data||[]));
+  const names=(arr||[]).map(m=>typeof m==='string'?m:(m.name||m.model||''));
+  const missing=sel && !names.some(n=>n===sel||n.split(':')[0]===sel.split(':')[0]);
+  if(missing){ t.textContent='Downloading…'; btn.disabled=true;
+    try{ await api('/api/models/pull',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:sel})});
+      t.textContent='Pulling…'; let tries=0;
+      const iv=setInterval(async()=>{ tries++;
+        const st=await api('/api/models/pull_status?name='+encodeURIComponent(sel)).catch(()=>null);
+        if(st&&(st.done||st.finished||tries>60)){clearInterval(iv);btn.disabled=false;t.textContent='Installed ✓';setTimeout(()=>t.textContent='Download',2500);loadModels();}
+      },2000);
+    }catch(e){btn.disabled=false;t.textContent='Error';setTimeout(()=>t.textContent='Download',2000);}
+  } else { $('#guidemodal').style.display='flex'; setTimeout(loadModels,100); }
+};
+
+// ---------- PersonaLive liquid-glass enforcement ----------
+function applyPersonaGlass(){
+  const pg=$('#page-persona'); if(!pg) return;
+  pg.querySelectorAll('.card').forEach(el=>{
+    el.style.setProperty('background','rgba(8,16,34,.40)','important');
+    el.style.setProperty('-webkit-backdrop-filter','blur(14px)','important');
+    el.style.setProperty('backdrop-filter','blur(14px)','important');
+    el.style.setProperty('border','1px solid rgba(148,185,255,.16)','important');
+  });
+  ['plportraitprev','plcamera','planim','plthumbs','plout'].forEach(id=>{
+    const el=document.getElementById(id); if(!el) return;
+    el.style.setProperty('background','rgba(5,10,22,.64)','important');
+    el.style.setProperty('-webkit-backdrop-filter','blur(10px)','important');
+    el.style.setProperty('backdrop-filter','blur(10px)','important');
+    el.style.setProperty('border','1px solid rgba(148,185,255,.16)','important');
+  });
+  const anim=document.getElementById('planim');
+  if(anim)anim.style.setProperty('background','rgba(3,7,16,.88)','important');
+  pg.querySelectorAll('input,select').forEach(el=>{
+    el.style.setProperty('background','rgba(10,20,42,.30)','important');
+    el.style.setProperty('-webkit-backdrop-filter','blur(8px)','important');
+    el.style.setProperty('backdrop-filter','blur(8px)','important');
+    el.style.setProperty('border','1px solid rgba(255,255,255,.18)','important');
+  });
+}
+// run on load, on nav to persona, and observe DOM changes inside the page
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',applyPersonaGlass);else applyPersonaGlass();
+const _origActivate=activatePage;
+activatePage=function(p){_origActivate(p);if(p==='persona')setTimeout(applyPersonaGlass,50);};
+const _pg=document.getElementById('page-persona');
+if(_pg)new MutationObserver(()=>applyPersonaGlass()).observe(_pg,{childList:true,subtree:true});
+
+// ---------- PersonaLive page ----------
+(function(){
+  const out=$('#plout'); if(!out) return;
+  const log=t=>{out.textContent=(out.textContent?t+'\n':'')+t;out.scrollTop=out.scrollHeight;};
+  async function st(){try{const r=await api('/api/media/run',{method:'POST',body:JSON.stringify({tool:'persona_live.pl_status',args:{}})});
+    const j=JSON.parse(r.output||'{}');
+    $('#plstat').textContent=j.up?'● service up':'○ service down (mock/prompt mode)';
+    $('#plsvc').textContent=j.service||'—';}catch(e){$('#plstat').textContent='○ offline';}}
+  st(); setInterval(st,15000);
+  let plPortrait='', plRunning=false, plStreamImg=null;
+  const plStage=$('#planim');
+  function plStageIdle(msg){plRunning=false;if(plStreamImg){plStreamImg.remove();plStreamImg=null;}
+    plStage.innerHTML='<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="opacity:.45"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="m10 9 5 3-5 3z"/><path d="M8 22h8"/></svg><span>'+(msg||'animation output — press Start')+'</span>';}
+  function plCall(tool,args){return api('/api/media/run',{method:'POST',body:JSON.stringify({tool,args})}).then(r=>r.output||JSON.stringify(r));}
+  $('#plfps').oninput=e=>{$('#plfpsv').textContent=e.target.value;
+    if(plRunning)plCall('persona_live.pl_start',{camera:$('#plcamera').value,fps:+e.target.value}).then(log);};
+  $('#plupload').onclick=()=>$('#plportraitfile').click();
+  $('#plportraitfile').onchange=e=>{const f=e.target.files[0];if(f){plPortrait=f.name;
+    $('#plportraitprev').innerHTML='<span style="font-size:10px">'+f.name+'</span>';log('portrait → '+f.name);}};
+  $('#plsample').onchange=async e=>{if(!e.target.value)return;plPortrait=e.target.value;
+    log('→ pl_portrait_prompt('+e.target.value+')');
+    log(await plCall('persona_live.pl_portrait_prompt',{subject:e.target.value}));};
+  $('#plcamera').onchange=e=>{log('camera → '+e.target.value);
+    if(plRunning)plCall('persona_live.pl_start',{camera:e.target.value,fps:+$('#plfps').value}).then(log);};
+  $('#plfuse').onclick=async()=>{log('→ pl_fuse portrait='+ (plPortrait||'default') +' cam='+$('#plcamera').value);
+    log(await plCall('persona_live.pl_fuse',{portrait:plPortrait||'default',camera:$('#plcamera').value}));};
+  $('#plstart').onclick=async()=>{const fps=+$('#plfps').value,cam=$('#plcamera').value;
+    log('→ pl_start cam='+cam+' fps='+fps);
+    const out=await plCall('persona_live.pl_start',{camera:cam,fps});
+    log(out);
+    try{const j=JSON.parse(out);
+      if(j.streams&&j.streams.length){ // try each stream URL as MJPEG/img until one loads
+        let i=0;const tryNext=()=>{if(i>=j.streams.length){plStageIdle('stream unreachable — service may not serve MJPEG');return;}
+          const u=j.streams[i++];const im=new Image();
+          im.onload=()=>{plRunning=true;plStage.innerHTML='';plStage.style.position='relative';im.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:12px';plStage.appendChild(im);plStreamImg=im;log('streaming ← '+u);};
+          im.onerror=tryNext;im.src=u;};
+        tryNext();}
+      else plStageIdle(j.ok===false?'service down — prompt mode':'started (no stream URL)');
+    }catch(e){plStageIdle('started — prompt mode');}};
+  $('#plreset').onclick=async()=>{log('→ pl_reset');log(await plCall('persona_live.pl_reset',{}));plStageIdle('reset — press Start');};
+  $('#plcopy').onclick=async()=>{try{await navigator.clipboard.writeText(out.textContent);$('#plcopy').textContent='Copied';setTimeout(()=>$('#plcopy').textContent='Copy',1200);}catch(e){}};
+})();
+
+// ---------- nav ----------
+const TITLES = {chat:'Chat', telemetry:'Hardware', workspace:'Workspace', media:'Media Studio', persona:'PersonaLive', settings:'Settings'};
+function activatePage(page) {
+  const btn = document.querySelector(`nav button.nav[data-page="${page}"]`);
+  if (!btn) return;
+  document.querySelectorAll('nav button.nav').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('section.page').forEach(x => x.classList.remove('active'));
+  btn.classList.add('active');
+  $('#page-' + btn.dataset.page).classList.add('active');
+  const ttl = $('#viewtitle'); if (ttl) ttl.textContent = TITLES[btn.dataset.page] || '';
+  if (btn.dataset.page === 'settings') loadSettings();
+  if (btn.dataset.page === 'workspace') { loadWorkspaces().then(loadFiles); }
+}
+document.querySelectorAll('nav button.nav').forEach(b => b.onclick = () => {
+  activatePage(b.dataset.page);
+  localStorage.setItem('mai_page', b.dataset.page);
+});
+// restore last active page on load (fallback: chat)
+(function(){
+  const saved = localStorage.getItem('mai_page');
+  if (saved && saved !== 'chat' && document.querySelector(`nav button.nav[data-page="${saved}"]`))
+    activatePage(saved);
+})();
+
+
+
+// ---------- Vanta fog background (theme-synced, light on resources) ----------
+let _vanta = null;
+function cssVar(n){ return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+function vantaColors(){
+  const dark = document.documentElement.dataset.theme !== 'light';
+  const blue = document.documentElement.dataset.accent === 'blue';
+  return dark
+    ? (blue ? {hi:0x4a6f9e, mid:0x2e5378, base:0x0a1220}
+            : {hi:0x7d5aa8, mid:0x3e2560, base:0x0a0812})
+    : (blue ? {hi:0x8d9684, mid:0xc3c9b6, base:0xebe9e0}
+            : {hi:0x9a917e, mid:0xd0cbb4, base:0xf0eee4});
+}
+function killVanta(){
+  if (_vanta) { try { _vanta.destroy(); } catch(e) {} _vanta = null; }
+}
+function initVanta(){
+  try {
+    if (typeof VANTA === 'undefined' || !VANTA.FOG) return; // CDN blocked -> CSS fallback remains
+    const el = document.getElementById('vanta');
+    if (!el || el.offsetWidth === 0 || el.offsetHeight === 0) return; // not mounted yet
+    killVanta();
+    const c = vantaColors();
+    if (VANTA.FOG) {
+      try {
+        _vanta = VANTA.FOG({ el:'#vanta', highlightColor:c.hi, midtoneColor:c.mid,
+          baseColor:c.base, blurFactor:1.2, speed:0.02, zoom:0.75, gyroscope:false });
+      } catch(e) { _vanta = null; }
+    }
+  } catch(e) { /* never let background code break the app */ }
+}
+let _vantaSpeed = 0.02, _lastTok = 0, _tokCount = 0;
+// rAF-driven speed sync: millisecond-smooth interpolation on a ~3s ease window
+let _fogRaf = null, _fogLast = 0;
+function fogFrame(now){
+  _fogRaf = requestAnimationFrame(fogFrame);
+  if (!_vanta) return;
+  if (!_fogLast) _fogLast = now;
+  const dtms = Math.min(now - _fogLast, 100); _fogLast = now;
+  const dt = (now - _lastTok) / 1000;
+  let target = 0.02; // ~1/75 of Vanta baseline (1.7)
+  if (busy && dt < 30) {
+    const rate = _tokCount / Math.max(dt, 0.5);
+    target = Math.min(0.06, 0.02 + Math.min(rate, 30) * 0.0013);
+  }
+  // critically-damped style lerp: ~3000ms time constant -> buttery every-frame motion
+  const k = 1 - Math.exp(-dtms / 3000);
+  _vantaSpeed = Math.min(0.07, Math.max(0.015, _vantaSpeed + (target - _vantaSpeed) * k));
+  if (_vanta && typeof _vanta.setOptions === 'function') {
+    try { _vanta.setOptions({ speed: _vantaSpeed }); } catch(e) {}
+  } else if (_vanta && _vanta.options) {
+    try { _vanta.options.speed = _vantaSpeed; } catch(e) {}
+  }
+}
+_fogRaf = requestAnimationFrame(fogFrame);
+
+let _vantaTries = 0;
+function vantaBoot(){
+  initVanta();
+  if (!_vanta && _vantaTries++ < 20) setTimeout(vantaBoot, 400);
+}
+vantaBoot();
+window.addEventListener('load', () => { _vantaTries = 0; vantaBoot(); });
+window.addEventListener('beforeunload', killVanta);
+window.addEventListener('error', e => { /* keep UI alive on any vanta error */ });
+
+// ---------- provider dropdown ----------
+async function refreshProviderOptions() {
+  const sel = $('#provider');
+  const cur = sel.value;
+  let status = {}, settings = {};
+  try { status = await api('/api/status'); } catch(e) {}
+  try { settings = await api('/api/settings'); } catch(e) {}
+  const opts = ['<option value="">Auto-route</option>',
+                '<option value="agent">Agent · tools</option>'];
+  if (status.ollama && status.ollama.running)
+    opts.push('<option value="ollama">local models</option>');
+  const cloudModel = settings.cloud_model || '';
+  const custom = settings.custom_providers || {};
+  const seen = new Set();
+  for (const [name, cfg] of Object.entries(custom)) {
+    seen.add(name);
+    const lbl = cfg.model ? `${name} · ${cfg.model}` : name;
+    opts.push(`<option value="${name}">${lbl}</option>`);
+  }
+  for (const p of (settings.providers || [])) {
+    if (seen.has(p)) continue;
+    const lbl = cloudModel ? `${p} · ${cloudModel}` : p;
+    opts.push(`<option value="${p}">${lbl}</option>`);
+  }
+  sel.innerHTML = opts.join('');
+  if ([...sel.options].some(o => o.value === cur)) sel.value = cur;
+}
+refreshProviderOptions();
+setInterval(refreshProviderOptions, 15000);
+
+// ---------- status popover ----------
+async function fillStatusPop() {
+  let st = {}, tel = {};
+  try { st = await api('/api/status'); } catch(e) {}
+  try { tel = await api('/api/telemetry'); } catch(e) {}
+  const lines = [
+    `host: ${st.host || '—'}`,
+    `ollama: ${st.ollama && st.ollama.running ? 'running' : 'offline'}`,
+    st.ollama && st.ollama.models ? `models: ${st.ollama.models.join(', ')}` : '',
+    `tier: ${window._tierTxt || tel.tier || '—'}`,
+    tel.warnings && tel.warnings.length ? `warnings: ${tel.warnings.join(', ')}` : '',
+    `cloud keys: ${(st.cloud_keys||[]).join(', ') || 'none'}`,
+  ].filter(Boolean);
+  $('#statuspopbody').innerHTML = lines.map(l => `<div style="padding:3px 0">${l}</div>`).join('');
+}
+$('#statuspill').onclick = e => {
+  e.stopPropagation();
+  const pop = $('#statuspop');
+  const open = pop.style.display === 'block';
+  pop.style.display = open ? 'none' : 'block';
+  if (!open) fillStatusPop();
+};
+$('#procbar').onclick = async e => {
+  e.stopPropagation();
+  const pop = $('#statuspop');
+  const open = pop.style.display === 'block';
+  pop.style.display = open ? 'none' : 'block';
+  if (!open) {
+    let a = {};
+    try { a = await api('/api/activity'); } catch(err) {}
+    $('#statuspopbody').innerHTML =
+      `<div style="padding:3px 0">active processes: ${a.count || 0}</div>` +
+      `<div style="padding:3px 0">current: ${a.label || '—'}</div>` +
+      `<div style="padding:3px 0;color:var(--dim)">${busy ? 'this tab: generating' : 'background only'}</div>`;
+  }
+};
+document.addEventListener('click', e => {
+  if (!e.target.closest('#statuspop') && e.target.id !== 'statuspill' && e.target.id !== 'procbar')
+    $('#statuspop').style.display = 'none';
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { $('#statuspop').style.display = 'none'; $('#delmodal').style.display='none'; }
+});
+
+// ---------- background activity sync ----------
+async function pollActivity() {
+  try {
+    const a = await api('/api/activity');
+    remoteActive = !!a.active;
+    window._actLabel = a.label || '';
+    paintProc();
+  } catch(e) {}
+}
+pollActivity(); setInterval(pollActivity, 3000);
+
+// ---------- status ----------
+async function refreshStatus() {
+  try {
+    const s = await api('/api/status');
+    HOSTNAME = s.host || '';
+    $('#netdot').className = 'dot' + (s.online ? ' on' : '');
+    $('#statusjson').textContent = JSON.stringify(s, null, 2);
+  } catch(e) {}
+}
+refreshStatus(); setInterval(refreshStatus, 10000);
+
+// ---------- models ----------
+async function loadModels() {
+  try {
+    const d = await api('/api/models');
+    const ms = d.models || [];
+    const sel = $('#modelpick');
+    const cur = sel.value;
+    sel.innerHTML = '<option value="">auto model</option>' +
+      ms.map(m => `<option value="${m.name}">${m.name}</option>`).join('');
+    sel.value = cur;
+    sel.title = cur || 'auto model';
+  } catch(e) {}
+}
+async function maybeShowHelp(){
+  if (localStorage.getItem('mai_help_seen4')) return;
+  $('#helpmodal').style.display = 'flex';
+  localStorage.setItem('mai_help_seen4', '1');
+}
+let _firstRun = !localStorage.getItem('mai_help_seen4');
+function closeHelp(){ $('#helpmodal').style.display='none';
+  if (_firstRun){ _firstRun=false; openGuide(); } }
+$('#helpclose').onclick = closeHelp;
+$('#helpmodal').addEventListener('click', e => { if(e.target.id==='helpmodal') closeHelp(); });
+$('#delcancel').onclick = () => { $('#delmodal').style.display = 'none'; };
+$('#delmodal').addEventListener('click', e => { if (e.target.id === 'delmodal') $('#delmodal').style.display='none'; });
+window.openHelp = () => { $('#helpmodal').style.display = 'flex'; };
+window.openGuide = () => { $('#guidemodal').style.display = 'flex'; };
+$('#autoscan').onclick = async () => {
+  const out = $('#scanresult'); out.textContent = 'scanning hardware…';
+  const CAT = {
+    'Tiny · 4GB RAM': [['qwen2.5:0.5b',0.4],['smollm2:360m',0.3],['smollm2:135m',0.2],['qwen2.5:1.5b',1.0],['llama3.2:1b',0.8],['gemma3:1b',0.8],['nanbeige4.2-3b',2.2]],
+    'Normal Chat': [['llama3.2:3b',2.0],['phi3.5:3.8b',2.2],['gemma2:2b',1.6],['qwen2.5:1.5b',1.0],['smollm2:1.7b',1.8],['nanbeige4.2-3b',2.2]],
+    'Coding': [['qwen2.5-coder:7b',4.7],['deepseek-coder:6.7b',3.8],['codeqwen:7b',4.7],['starcoder2:7b',4.0]],
+    'DeepThink': [['deepseek-r1:7b',4.7],['qwen2.5:14b',9.0],['llama3.1:8b',4.9],['mixtral:8x7b',26.0]],
+    'Vision': [['llava:7b',4.7],['bakllava:7b',4.0]],
+        'Large': [['qwen2.5:32b',20.0],['llama3.3:70b',40.0],['mixtral:8x22b',80.0]],
+    'Frontier': [
+      ['Kimi K2', 550, 'Moonshot AI · ~1T params · needs ~600GB+ unified mem', 'hf.co/moonshotai/Kimi-K2-Instruct'],
+      ['Kimi K3.1 Pro', 1561, 'Moonshot AI · 2.78T (104B active) · needs 1.5TB+ RAM/VRAM', 'hf.co/moonshotai/Kimi-K2.5'],
+      ['Muse Spark Open', 533, 'Meta · 816B (42B active) · 4-bit needs dual 512GB Mac Studios', 'hf.co/meta-llama/Llama-3.1-405B-Instruct'],
+      ['Mistral Large 4', 1060, 'Mistral AI · ~1T (52B active) · needs 1TB+ unified mem / GPU cluster', 'hf.co/mistralai/Mistral-Large-Instruct-2411']
+    ]
+  };
+  try {
+    const t = await api('/api/telemetry'), st = await api('/api/status');
+    const sn = t.snapshot || {};
+    const ramGB = sn.mem_total_mb ? Math.round(sn.mem_total_mb/1024) : 0;
+    const gpus = sn.gpus || [];
+    const vramGB = gpus.length ? Math.round((gpus[0].mem_total_mb||0)/1024) : 0;
+    const tier = t.tier || 'medium';
+    // filter catalog by tier
+    const ok = tier === 'large' ? ['Normal Chat','Coding','DeepThink','Vision','Large','Frontier']
+             : tier === 'medium' ? ['Normal Chat','Coding','DeepThink','Vision'] : ['Normal Chat','Coding'];
+    let html = '', total = 0, picked = {};
+    for (const [cat, models] of Object.entries(CAT)) {
+      if (!ok.includes(cat)) continue;
+      html += `<div style="font-family:'IBM Plex Mono',monospace;font-size:10px;
+        letter-spacing:1px;color:var(--accent);margin:10px 0 4px">${cat.toUpperCase()}</div>`;
+      for (const m of models) {
+        const [label, gb, meta, pull] = m.length > 2 ? m : [m[0], m[1], '', m[0]];
+        const name = pull || label;
+        const def = (cat==='Normal Chat'&&name.startsWith('llama3.2'))||(cat==='Coding'&&name.startsWith('qwen2.5-coder'))||(cat==='DeepThink'&&name.startsWith('deepseek-r1'));
+        if (def) { total += gb; picked[name]=1; }
+        html += `<label style="display:block;font-size:12px;color:var(--fg);padding:3px 0;cursor:pointer">
+          <span style="display:flex;gap:8px;align-items:center">
+          <input type="checkbox" class="modpick" data-gb="${gb}" data-name="${name}" ${def?'checked':''}>
+          ${label} <span style="color:var(--dim);margin-left:auto">${gb>=1000?(gb/1000).toFixed(1)+'TB':gb+'GB'}</span></span>
+          ${meta?`<div style="font-size:10.5px;color:var(--dim);padding-left:22px">${meta}</div>`:''}</label>`;
+      }
+    }
+    out.textContent = `cpu load: ${sn.cpu_percent||0}% · ram: ${ramGB}GB · vram: ${vramGB}GB · tier: ${tier}\ninstalled: ${(st.ollama&&st.ollama.models||[]).join(', ')||'none'}`;
+    $('#modcat').innerHTML = html;
+    const upd = () => {
+      let t2=0; document.querySelectorAll('.modpick:checked').forEach(c=>t2+=+c.dataset.gb);
+      $('#pulltotal').textContent = `total download: ~${t2.toFixed(1)} GB`;
+      $('#pullgo').style.display = t2>0 ? 'inline-flex' : 'none';
+    };
+    document.querySelectorAll('.modpick').forEach(c=>c.onchange=upd); upd();
+     $('#pullgo').onclick = () => {
+      const names = [...document.querySelectorAll('.modpick:checked')].map(c=>c.dataset.name);
+      $('#redalert').style.display='flex';
+      $('#redalert .rnames').textContent = names.join(', ');
+      $('#redyes').onclick = async () => {
+        $('#redalert').style.display='none';
+        const total=$('#pulltotal'), prog=$('#dlprog');
+        if(prog) prog.innerHTML=''; const dr=$('#dlrows'); if(dr) dr.innerHTML=''; const cd=$('#chatdlrows'); if(cd) cd.innerHTML=''; const dp=$('#dlpanel'); if(dp) dp.style.display='none';
+        if(!names.length){ total.textContent='no models selected — pick at least one'; return; }
+                let _dlActive=false;
+        function notify(msg,col){
+          const mk=host=>{if(!host)return;const d=document.createElement('div');d.style.cssText='display:flex;gap:8px;align-items:baseline';
+            d.innerHTML=`<span style="color:var(--dim);flex-shrink:0">${new Date().toLocaleTimeString()}</span><span style="color:${col||'var(--fg)'}">${msg}</span>`;
+            host.prepend(d);while(host.children.length>50)host.lastChild.remove();};
+          mk($('#notiflist')); mk($('#chatnotiflist'));
+          if(_dlActive){const c=$('#chatnotif');if(c)c.style.display='block';}
+        }
+        const _cn=$('#chatnotif');
+        if(_cn){const x=$('#chatnotifx');if(x)x.onclick=()=>{_cn.style.display='none';};
+          const cc=$('#chatnotifclear');if(cc)cc.onclick=()=>{const l=$('#chatnotiflist');if(l)l.innerHTML='';const l2=$('#notiflist');if(l2)l2.innerHTML='';const cd=$('#chatdlrows');if(cd)cd.innerHTML='';};}
+        $('#dlclear')&&($('#dlclear').onclick=()=>{const r=$('#dlrows');if(r)r.innerHTML='';});
+        $('#notifclear')&&($('#notifclear').onclick=()=>{const l=$('#notiflist');if(l)l.innerHTML='';});
+        function needAuth(msg){return /auth|permission|denied|sudo|password|401|403|root|admin|elevat/i.test(String(msg||''));}
+        function askPw(n){const pm=$('#pwmodal');if(!pm)return;
+          $('#pwmsg').textContent='Authentication/permission required for '+n+'. Enter password to retry (never stored).';
+          const inp=$('#pwinput'); inp.value=''; pm.style.display='flex'; inp.focus();
+          $('#pwok').onclick=()=>{const v=inp.value;inp.value='';pm.style.display='none';
+            if(v)pullOne(n); else setPh(n,'cancelled — tap row to retry','var(--dim)');};
+          $('#pwcancel').onclick=()=>{inp.value='';pm.style.display='none';setPh(n,'cancelled — tap row to retry','var(--dim)');};
+          inp.onkeydown=e=>{if(e.key==='Enter')$('#pwok').click();};}
+        const rows={};
+        const panel=$('#dlpanel'), drows=$('#dlrows');
+        if(panel)panel.style.display='block';
+        const row=n=>{ if(!rows[n]){ const d=document.createElement('div');
+            d.innerHTML=`<span style="color:var(--fg)">${n}</span> <span class="ph" style="color:var(--dim)">queued</span> <span class="el" style="color:var(--dim);float:right"></span>`;
+            const host=drows||prog; if(host){host.appendChild(d);host.scrollTop=host.scrollHeight;}
+          const chost=$('#chatdlrows'); if(chost){const c=d.cloneNode(true);chost.appendChild(c);while(chost.children.length>8)chost.firstChild.remove();chost.scrollTop=chost.scrollHeight;}
+            rows[n]={el:d.querySelector('.ph'),tm:d.querySelector('.el'),t0:Date.now()}; }
+          return rows[n]; };
+        const setPh=(n,txt,col,extra)=>{const r=row(n);if(!r)return;
+          r.el.innerHTML=txt;
+          if(extra&&extra.pct!=null){const bar=document.createElement('div');
+            bar.style.cssText='height:4px;border-radius:3px;background:rgba(255,255,255,.1);margin:3px 0;overflow:hidden';
+            bar.innerHTML=`<div style="height:100%;width:${extra.pct}%;background:var(--accent);transition:width .4s"></div>`;
+            r.el.parentElement.appendChild(bar);}
+          r.el.style.color=col||'var(--dim)';};
+        const tick=setInterval(()=>{Object.keys(rows).forEach(n=>{const r=rows[n];const s2=Math.floor((Date.now()-r.t0)/1000);
+          r.tm.textContent=s2>=60?(Math.floor(s2/60)+'m'+String(s2%60).padStart(2,'0')+'s'):s2+'s';});},1000);
+        async function pullOne(n){
+          setPh(n,'starting…');
+          const pr=await api('/api/models/pull',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:n})}).catch(e=>({ok:false,error:String(e)}));
+          if(pr&&pr.ok===false){const em=String(pr.error||'pull failed');setPh(n,'error: '+em,'var(--err)');
+          if(needAuth(em)){askPw(n);}
+          return false;}
+          setPh(n,'downloading…','var(--accent)');
+          let st=null,started=false,lastPct=null,lastPctTs=0,speedHist=[];
+          for(let i=0;i<600;i++){
+            await new Promise(r=>setTimeout(r,3000));
+            st=await api('/api/models/pull_status?name='+encodeURIComponent(n)).catch(()=>null);
+            if(!st) continue;
+            if(st.state==='running'){
+              started=true;
+              const now=Date.now();
+              // honest speed: %/s from real pct deltas only — N/A if no pct data
+              let spd='speed N/A';
+              if(st.pct!=null){
+                if(lastPct!=null&&now>lastPctTs){const dp=st.pct-lastPct,dt=(now-lastPctTs)/1000;
+                  if(dp>0&&dt>0){const v=dp/dt;spd=(v>=1?v.toFixed(1):v.toFixed(2))+' %/s';}}
+                lastPct=st.pct;lastPctTs=now;
+              }
+              // stall detection: running but no progress timestamp update for >15s
+              const stalled=st.last_ts&&(now/1000-st.last_ts)>15;
+              const pctTxt=st.pct!=null?` ${st.pct}%`:'';
+              const phaseTxt=st.phase?` · ${st.phase}`:'';
+              const sizeTxt=' · size N/A';
+              setPh(n,`pulling${pctTxt}${sizeTxt} · ${spd}${stalled?' · STALLED':''}${phaseTxt}`.slice(0,120),
+                    stalled?'var(--err)':'var(--accent)',{pct:st.pct});
+            }
+            if(started&&(st.state==='done'||st.state==='failed'))break;
+          }
+          if(st&&st.state==='done'){setPh(n,'installed ✓','var(--ok)');notify(`✓ ${n} installed`,'var(--ok)');return true;}
+          const ferr=(st&&st.code!=null?' (code '+st.code+')':'');
+          setPh(n,'failed'+ferr+' — tap row to retry','var(--err)');notify(`✗ ${n} failed${ferr}`,'var(--err)');
+          if(needAuth(ferr)||needAuth(st&&st.error)){askPw(n);}
+          const r=row(n); r.el.style.cursor='pointer';
+          r.el.onclick=()=>{r.el.onclick=null;pullOne(n);};
+          return false;
+        }
+        total.textContent='downloading from official sources…';_dlActive=true;const _cn2=$('#chatnotif');if(_cn2)_cn2.style.display='block';
+        let okc=0;
+        for(const n of names){ if(await pullOne(n)) okc++; }
+        clearInterval(tick);
+        total.textContent=`done: ${okc}/${names.length} installed — refresh model picker if needed`;_dlActive=false;notify(`batch done: ${okc}/${names.length} installed`,'var(--accent)');
+        loadModels();
+      };
+    };
+  } catch(e) { out.textContent = 'scan failed — is the backend running?'; }
+};
+loadModels(); setInterval(loadModels, 30000); maybeShowHelp();
+
+// ---------- telemetry ----------
+const hist = [];
+const chart = $('#chart'), ctx = chart.getContext('2d');
+function drawChart() {
+  const dpr = window.devicePixelRatio || 1;
+  chart.width = chart.clientWidth * dpr; chart.height = 360;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  const W = chart.clientWidth, H = 180;
+  ctx.clearRect(0,0,W,H);
+  const accentCol = getComputedStyle(document.documentElement)
+    .getPropertyValue('--accent').trim() || '#B7A5D4';
+  const series = [['cpu_percent',accentCol],['mem_percent','#c9a86a']];
+  series.forEach(([k,col]) => {
+    ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.beginPath();
+    hist.forEach((p,i) => {
+      const x = i/Math.max(1,hist.length-1)*W;
+      const y = H - (p[k]/100)*(H-24) - 12;
+      i ? ctx.lineTo(x,y) : ctx.moveTo(x,y);
+    });
+    ctx.stroke();
+  });
+}
+async function tickTelemetry() {
+  try {
+    const t = await api('/api/telemetry');
+    const snap = t.snapshot || {};
+    hist.push(snap); if (hist.length > 60) hist.shift();
+    const g = (snap.gpus || [])[0];
+    const gpuPct = g && g.mem_total_mb ? 100*g.mem_used_mb/g.mem_total_mb : null;
+    const setHw = (id, txt, pct) => {
+      const row = $('#'+id);
+      row.querySelector('.val').textContent = txt;
+      row.className = 'sysrow' + (pct > 90 ? ' crit' : pct > 75 ? ' warn' : '');
+    };
+    const f1 = v => v == null ? '–' : v.toFixed(0)+'%';
+    setHw('hw-cpu', f1(snap.cpu_percent), snap.cpu_percent);
+    setHw('hw-mem', snap.mem_percent != null
+      ? `${(snap.mem_used_mb/1024).toFixed(1)} / ${(snap.mem_total_mb/1024).toFixed(1)} GB` : '–',
+      snap.mem_percent);
+    setHw('hw-gpu', g ? `${(g.mem_used_mb/1024).toFixed(1)} / ${(g.mem_total_mb/1024).toFixed(1)} GB` : '–', gpuPct);
+    window._tierTxt = t.tier + (t.warnings.length ? ' · ' + t.warnings.join(', ') : '');
+    const cards = [
+      ['CPU', snap.cpu_percent, '%', 'compute'],
+      ['RAM', snap.mem_percent, '%', `${((snap.mem_used_mb||0)/1024).toFixed(1)} / ${((snap.mem_total_mb||0)/1024).toFixed(1)} GB`],
+      ['GPU VRAM', gpuPct, '%', g ? g.name : 'no dGPU'],
+      ['GPU util', g ? g.util_percent : null, '%', g ? `${g.mem_used_mb|0} / ${g.mem_total_mb|0} MB` : '—'],
+    ];
+    $('#cards').innerHTML = cards.map(([l,v,u,sub]) => `
+      <div class="card ${v > 90 ? 'crit' : v > 75 ? 'warn' : ''}">
+        <div class="label">${l}</div>
+        <div class="value">${v == null ? '—' : v.toFixed(0) + u}</div>
+        <div class="sub">${sub}</div>
+        <div class="bar"><div style="width:${Math.min(100, v || 0)}%"></div></div>
+      </div>`).join('');
+    drawChart();
+  } catch(e) {}
+}
+setInterval(tickTelemetry, 2000); tickTelemetry();
+window.addEventListener('resize', drawChart);
+
+// ---------- chat ----------
+function addMsg(cls, text, meta, modelLabel) {
+  const d = document.createElement('div');
+  d.className = 'msg ' + cls;
+  if (cls === 'user') {
+    d.innerHTML = `<span class="mlabel">YOU</span><div class="utext">${renderMd(text)}</div>`;
+  } else if (cls === 'assistant') {
+    const label = modelLabel ? modelLabel.toUpperCase() : 'ᛗᛁᚨᛋᛗᚨ';
+    d.innerHTML = `<div class="who"><span class="av">ᛗ</span><span class="wn">${label}</span></div>
+                   <div class="body">${renderMd(text)}${meta ? `<div class="meta">${meta}</div>` : ''}</div>`;
+  } else if (cls === 'trace') {
+    d.innerHTML = `<span class="tlabel">agent trace</span>`;
+  } else { d.innerHTML = text; }
+  $('#chatcol').appendChild(d);
+  smartScroll();
+  return d;
+}
+function renderMd(t) {
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const blocks = [];
+  let s = esc(t).replace(/```(\w*)\n([\s\S]*?)```/g, (m,l,c) => {
+    blocks.push(`<pre><code>${c}</code></pre>`); return `\u0000${blocks.length-1}\u0000`;
+  });
+  s = s.replace(/`([^`\n]+)`/g, '<code>$1</code>');
+  s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  s = s.replace(/(^|[^*\w])\*([^*\n]+)\*/g, '$1<em>$2</em>');
+  const out = [];
+  let inUl = false, inOl = false;
+  const close = () => { if (inUl){out.push('</ul>');inUl=false} if (inOl){out.push('</ol>');inOl=false} };
+  for (const raw of s.split('\n')) {
+    const ln = raw.trim();
+    if (!ln) { close(); continue; }
+    let m;
+    if ((m = ln.match(/^#{1,4}\s+(.*)/))) { close(); out.push(`<div class="mdh">${m[1]}</div>`); }
+    else if ((m = ln.match(/^\*\*([^*]+)\*\*:?\s*$/))) { close(); out.push(`<div class="mdh2">${m[1]}</div>`); }
+    else if (/^[-*•]\s+/.test(ln)) {
+      if (!inUl) { close(); out.push('<ul>'); inUl = true; }
+      out.push('<li>' + ln.replace(/^[-*•]\s+/, '') + '</li>');
+    }
+    else if ((m = ln.match(/^\d{1,2}[.)]\s+(.*)/))) {
+      if (!inOl) { close(); out.push('<ol>'); inOl = true; }
+      out.push('<li>' + m[1] + '</li>');
+    }
+    else { close(); out.push('<div>' + ln + '</div>'); }
+  }
+  close();
+  return out.join('').replace(/\u0000(\d+)\u0000/g, (m,i) => blocks[+i]);
+}
+// extract ALL <think>...</think> blocks (complete or still-open) from text
+function thinkParts(t) {
+  const thoughts = [];
+  let answer = '', i = 0;
+  const re = /<think>([\s\S]*?)(?:<\/think>|$)/g;
+  let m, last = 0;
+  while ((m = re.exec(t))) {
+    answer += t.slice(last, m.index);
+    thoughts.push(m[1]);
+    last = m.index + m[0].length;
+    if (!m[0].endsWith('</think>')) break; // open block: rest is thinking
+  }
+  answer += t.slice(last);
+  return {thoughts, answer};
+}
+function splitThought(t) {
+  const {thoughts, answer} = thinkParts(t);
+  return {thought: thoughts.join('').trim(), answer: answer.trim()};
+}
+function thoughtEl(bubble) {
+  let th = bubble.querySelector('.thought');
+  if (!th) {
+    th = document.createElement('div');
+    th.className = 'thought';
+    th.innerHTML = `<span class="th">Thinking…</span><div class="tbody"></div>`;
+    th.querySelector('.th').onclick = () => { th.dataset.userToggled='1'; th.classList.toggle('open'); };
+    bubble.querySelector('.who').after(th);
+  }
+  return th;
+}
+function renderThought(bubble, thought, secs, live) {
+  if (!thought) return;
+  const th = thoughtEl(bubble);
+  const label = live ? 'Thinking…' : `Thought${secs != null ? ` <span class="dur">for ${secs}s</span>` : ''}`;
+  th.querySelector('.th').innerHTML = label;
+  th.querySelector('.tbody').innerHTML = renderMd(thought.replace(/\s*\n\s*/g,' '));
+  if (!th.dataset.userToggled) th.classList.remove('open');
+}
+let remoteActive = false;
+function paintProc() {
+  const on = busy || remoteActive;
+  $('#procbar').classList.toggle('on', on);
+  if (on) {
+    const m = window._actLabel || '';
+    $('#procmod').textContent = (busy ? ($('#procmod').dataset.m || '') : '') || (m ? '· ' + m : '· working');
+  }
+}
+function setBusy(b) { busy = b; $('#send').disabled = b; $('#send').classList.toggle('on', !b); $('#send').innerHTML = b ? '' : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>';
+  paintProc();
+  // stop hidden per request
+  document.querySelector('.badge').classList.toggle('thinking', b);
+}
+function setActiveModule(name) { const el = $('#procmod'); if (el) { el.dataset.m = name ? '· ' + name : ''; if (busy) el.textContent = el.dataset.m; } }
+
+let traceEl = null, traceBody = null;
+const TRACE_LABELS = { agent_msg:'message', thought:'thinking', tool_call:'tool call',
+  tool_result:'result', fallback:'fallback' };
+function ensureTrace() {
+  if (!traceEl) {
+    traceEl = addMsg('trace', '');
+    traceEl.classList.add('open');
+    const label = traceEl.querySelector('.tlabel');
+    label.onclick = () => traceEl.classList.toggle('open');
+    traceBody = document.createElement('span');
+    traceBody.className = 'tbody';
+    label.after(traceBody);
+  }
+  return traceBody;
+}
+function trace(evtype, text, ok) {
+  const body = ensureTrace();
+  const line = document.createElement('div');
+  line.className = 'tline c-' + evtype + (ok === false ? ' bad' : '');
+  line.innerHTML = `<span class="tag">${TRACE_LABELS[evtype] || evtype}</span><span>${renderMd(text)}</span>`;
+  body.appendChild(line);
+  smartScroll();
+}
+function endTrace() {
+  traceEl = null; traceBody = null;
+  document.querySelectorAll('.msg.trace.open').forEach(el => el.classList.remove('open'));
+}
+
+function send() {
+  const p = $('#prompt').value.trim();
+  if (!p || busy) return;
+  // kill any in-flight turn: close socket + ask backend to abort streams/unload models
+  if (activeSock && activeSock.readyState === 1) {
+    try { activeSock.send(JSON.stringify({type:'stop'})); } catch(e) {}
+    try { activeSock.close(); } catch(e) {}
+  }
+  api('/api/abort', {method:'POST'}).catch(() => {});
+  setBusy(true); endTrace();
+  addMsg('user', p);
+  _forceScroll = true; smartScroll(true); setTimeout(()=>_forceScroll=false, 400);
+  $('#prompt').value = '';
+  const prov = $('#provider').value || undefined;
+  const model = $('#modelpick').value || undefined;
+  let bubble = null, acc = '', metaTxt = '', agentThought = '', _lastStepLine = null;
+  setActiveModule(''); _tokCount = 0; _lastTok = Date.now();
+  // show an immediate placeholder bubble so the turn is never blank while
+  // the model cold-loads / thinks before its first token
+  bubble = addMsg('assistant','');
+  bubble._t0 = Date.now();
+  bubble.querySelector('.body').innerHTML = '<div>…</div>';
+  const sock = new WebSocket(wsUrl('/ws/chat'));
+  activeSock = sock;
+  const atts = attachments; attachments = []; renderChips();
+  sock.onopen = () => sock.send(JSON.stringify({prompt:p, session_id:session,
+    provider:prov, model:model, attachments: atts}));
+  sock.onmessage = e => {
+    const ev = JSON.parse(e.data);
+    if (ev.type === 'delta') {
+      acc += ev.content; _tokCount++; _lastTok = Date.now();
+      if (!bubble) { bubble = addMsg('assistant',''); bubble._t0 = Date.now(); }
+      const {thoughts, answer} = thinkParts(acc);
+      if (thoughts.length) renderThought(bubble, thoughts.join(''), null, true);
+      bubble.querySelector('.body').innerHTML = renderMd(answer || '…') + (metaTxt?`<div class="meta">${metaTxt}</div>`:'');
+    }
+    else if (ev.type === 'meta') {
+      if (!bubble) { bubble = addMsg('assistant',''); bubble._t0 = Date.now(); }
+      const who = ev.host ? `${ev.host}${ev.backend?'·'+ev.backend:''}` : ev.provider;
+      metaTxt = `${who}/${ev.model} · ${ev.task} · tier:${ev.tier}`;
+      if (bubble) bubble.querySelector('.who .wn').textContent = ev.model ? ev.model.toUpperCase() : 'ᛗᛁᚨᛋᛗᚨ';
+      setActiveModule(ev.provider === 'agent' ? 'agent' : (ev.model || ev.provider));
+    }
+    else if (ev.type === 'agent_msg') {
+      const _am = `${ev['from']} → ${ev['to']}: ${ev.content}`;
+      trace('agent_msg', _am);
+      const _sm = _am.match(/step\s+(\d+)/i);
+      if (_sm) { _lastStepLine = ensureTrace().lastElementChild; }
+      setActiveModule(ev['to'] && ev['to'] !== 'user' ? ev['to'] : ev['from']);
+    }
+    else if (ev.type === 'thought') {
+      if (bubble) {
+        agentThought = (agentThought ? agentThought + '\n\n' : '') + String(ev.content);
+        renderThought(bubble, agentThought, null, true);
+      }
+      trace('thought', `step ${ev.step}: ${String(ev.content).slice(0,300)}`);
+    }
+    else if (ev.type === 'tool_call') {
+      setActiveModule(ev.tool);
+      trace('tool_call', ev.tool, true);
+    }
+    else if (ev.type === 'tool_result') {
+      setActiveModule('');
+      trace('tool_result', `${ev.tool} ${ev.ok?'✓':'✗'}`, ev.ok);
+      if (ev.ok && _lastStepLine) {
+        const tick = document.createElement('span');
+        tick.textContent = ' ✓'; tick.style.color = 'var(--ok)';
+        _lastStepLine.appendChild(tick); _lastStepLine = null;
+      }
+    }
+    else if (ev.type === 'shell_perm') {
+      $('#permcmd').textContent = ev.command || '(command)';
+      $('#permmodal').dataset.rid = ev.id;
+      $('#permmodal').style.display = 'flex';
+      document.querySelectorAll('#permmodal [data-p]').forEach(b => {
+        b.onclick = () => {
+          try { activeSock.send(JSON.stringify({type:'perm', id: ev.id, choice: b.dataset.p})); } catch(e) {}
+          $('#permmodal').style.display = 'none';
+        };
+      });
+      trace('tool_call', `shell permission requested: ${String(ev.command).slice(0,120)}`);
+    }
+    else if (ev.type === 'fallback') { metaTxt += ` — fallback (${ev.provider}: ${ev.reason})`; }
+    else if (ev.type === 'error') {
+      acc += `\n\n⚠ ${ev.content}`;
+      if (!bubble) { bubble = addMsg('assistant',''); bubble._t0 = Date.now(); }
+      bubble.querySelector('.body').innerHTML = renderMd(acc);
+    }
+    else if (ev.type === 'stopped' || ev.type === 'done') {
+      if (ev.type === 'done') metaTxt += ` · ${ev.chars} chars`; else metaTxt += ' · stopped';
+      if (bubble) {
+        const {thought, answer} = splitThought(acc);
+        if (thought) {
+          const secs = bubble._t0 ? Math.max(1, Math.round((Date.now()-bubble._t0)/1000)) : null;
+          renderThought(bubble, thought, secs, false);
+          acc = answer || '(no final answer)';
+        } else {
+          const th = bubble.querySelector('.thought');
+          if (th) th.remove();
+        }
+        bubble.querySelector('.body').innerHTML = renderMd(acc) + `<div class="meta">${metaTxt}</div>`;
+      }
+      if (bubble) {
+        const body = bubble.querySelector('.body');
+        if (!body.innerHTML.trim() || body.innerHTML.includes('…')) {
+          const {answer} = splitThought(acc);
+          body.innerHTML = renderMd(answer || acc || '(no response text received — the model may have returned only reasoning; try rephrasing)') + `<div class="meta">${metaTxt}</div>`;
+        }
+      }
+      endTrace(); setActiveModule(''); setBusy(false); loadChatList(); activeSock = null; autoCheckpoint();
+    }
+    smartScroll();
+  };
+  sock.onclose = () => {
+    if (busy) {
+      if (bubble && !bubble.querySelector('.body').innerHTML.includes(renderMd(acc||' ').slice(0,20))) {}
+      const {thought, answer} = splitThought(acc);
+      if (bubble) {
+        if (thought) renderThought(bubble, thought, null, false);
+        bubble.querySelector('.body').innerHTML = renderMd(answer || acc || '(connection closed before a reply arrived)') + `<div class="meta">${metaTxt} · closed</div>`;
+      } else if (acc) addMsg('assistant', acc);
+      endTrace(); setActiveModule(''); setBusy(false); activeSock = null;
+    }
+  };
+  sock.onerror = () => { addMsg('sys','WebSocket error'); endTrace(); setActiveModule(''); setBusy(false); activeSock = null; };
+}
+$('#send').onclick = send;
+$('#autobtn').onclick = async () => {
+  const b = $('#autobtn'); b.textContent = '…'; b.disabled = true;
+  const r = await api('/api/auto', {method:'POST'}).catch(() => null);
+  b.textContent = r && r.ok ? `✓ freed ${r.models_unloaded} models` : 'failed';
+  setTimeout(() => { b.textContent = 'Auto'; b.disabled = false; }, 1800);
+};
+$('#panicbtn').onclick = async () => {
+  if (activeSock && activeSock.readyState === 1) {
+    try { activeSock.send(JSON.stringify({type:'stop'})); } catch(e) {}
+    try { activeSock.close(); } catch(e) {}
+  }
+  activeSock = null;
+  const r = await api('/api/panic', {method:'POST'}).catch(() => null);
+  endTrace(); setActiveModule(''); setBusy(false);
+  const b = $('#panicbtn');
+  b.textContent = r ? `✓ ${r.streams_aborted+''}/${r.models_unloaded} freed` : '✓ stopped';
+  setTimeout(() => b.textContent = 'Panic', 1600);
+};
+$('#stopbtn').onclick = () => {
+  if (activeSock && activeSock.readyState === 1)
+    activeSock.send(JSON.stringify({type:'stop'}));
+};
+// ---------- file attachments (text only) ----------
+let attachments = [];
+const TEXTY = /\.(txt|md|markdown|py|js|ts|tsx|jsx|json|ya?ml|toml|ini|cfg|conf|csv|tsv|html?|css|scss|c|h|cpp|hpp|rs|go|java|kt|swift|sh|bash|zsh|sql|xml|svg|env|gitignore|log)$/i;
+function renderChips() {
+  const c = $('#chips');
+  c.style.display = attachments.length ? 'flex' : 'none';
+  c.innerHTML = attachments.map((a,i) =>
+    `<span style="display:inline-flex;align-items:center;gap:6px;background:var(--thinkbg);
+      border:1px solid var(--border-soft);border-radius:12px;padding:4px 6px 4px 10px;
+      font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--accent)">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> ${a.name}<button data-i="${i}" class="chipx" style="background:none;border:none;
+      color:var(--dim);cursor:pointer;font-size:11px;padding:0 2px">✕</button></span>`).join('');
+  c.querySelectorAll('.chipx').forEach(b => b.onclick = () => {
+    attachments.splice(+b.dataset.i, 1); renderChips();
+  });
+}
+$('#attachbtn').onclick = () => $('#filepick').click();
+$('#filepick').onchange = async e => {
+  for (const f of e.target.files) {
+    if (f.size > 200*1024) { addMsg('sys', `⏭ ${f.name} skipped — over 200KB`); continue; }
+    const buf = await f.arrayBuffer();
+    if (buf.slice(0, 8000).includes(0)) { addMsg('sys', `⏭ ${f.name} skipped — binary file`); continue; }
+    const text = new TextDecoder('utf-8', {fatal:false}).decode(buf);
+    attachments.push({name: f.name, content: text.slice(0, 60000)});
+  }
+  e.target.value = '';
+  renderChips();
+};
+$('#provider').onchange = () => { localStorage.setItem('mai_provider', $('#provider').value); autoCheckpoint(); };
+$('#modelpick').onchange = () => { localStorage.setItem('mai_model', $('#modelpick').value); autoCheckpoint(); };
+(function restoreSel(){
+  const pv = localStorage.getItem('mai_provider'); if (pv != null) $('#provider').value = pv;
+  setTimeout(() => { const mv = localStorage.getItem('mai_model'); if (mv) $('#modelpick').value = mv; }, 3000);
+})();
+$('#prompt').addEventListener('keydown', e => { if (e.key==='Enter') send(); });
+
+// ---------- chat sessions ----------
+function saveSession() { localStorage.setItem('mai_session', session); }
+async function loadChatList() {
+  try {
+    const chats = await api('/api/chats');
+    $('#chatlist').innerHTML = chats.map(c => {
+      const title = (c.title || 'untitled').slice(0, 40);
+      const when = (c.last_at || '').slice(5, 16).replace('T',' ');
+      return `<div class="chatitem ${c.session_id === session ? 'active' : ''}" data-sid="${c.session_id}">
+        <span class="t" title="${(c.title||'').replace(/"/g,'&quot;')}">${title}</span>
+        <span class="d">${when}</span>
+        <span class="x" data-del="${c.session_id}" title="Delete chat">✕</span></div>`;
+    }).join('');
+    document.querySelectorAll('.chatitem').forEach(el => {
+      el.onclick = e => { if (!e.target.dataset.del) selectChat(el.dataset.sid); };
+    });
+    document.querySelectorAll('.chatitem .x').forEach(el => {
+      el.onclick = async e => {
+        e.stopPropagation();
+        const sid = el.dataset.del;
+        const item = el.closest('.chatitem');
+        $('#deltitle').textContent = '"' + (item ? item.querySelector('.t').textContent : sid) + '" will be permanently removed.';
+        $('#delmodal').style.display = 'flex';
+        $('#delyes').onclick = async () => {
+          $('#delmodal').style.display = 'none';
+          await api('/api/history/' + encodeURIComponent(sid), {method:'DELETE'});
+          if (sid === session) { session = 'main'; saveSession(); }
+          loadChatList();
+        };
+      };
+    });
+  } catch(e) {}
+}
+async function selectChat(sid) {
+  session = sid; saveSession();
+  activatePage('chat');
+  document.querySelectorAll('.chatitem').forEach(x =>
+    x.classList.toggle('active', x.dataset.sid === sid));
+  await loadHistory();
+}
+$('#newchat').onclick = () => {
+  session = 'chat-' + Date.now().toString(36);
+  saveSession();
+  $('#chatcol').querySelectorAll('.msg').forEach(m=>m.remove());
+  loadChatList();
+  $('#prompt').focus();
+};
+
+// ---------- checkpoints ----------
+function lastAssistantText() {
+  const msgs = [...document.querySelectorAll('#chatcol .msg.assistant .body')];
+  return msgs.length ? msgs[msgs.length-1].innerText.slice(0, 3000) : '';
+}
+function workspaceFilesList() {
+  return [...document.querySelectorAll('#filelist .frow')]
+    .map(f => f.textContent.trim()).slice(0, 60);
+}
+// auto-save session snapshot (debounced, fire-and-forget)
+let _ckptTimer = null;
+function autoCheckpoint() {
+  clearTimeout(_ckptTimer);
+  _ckptTimer = setTimeout(() => {
+    const files = workspaceFilesList();
+    const note = `# Session checkpoint — ${new Date().toISOString()}\nSession: ${session}\n` +
+      `provider: ${$('#provider').value || 'auto'}\nmodel: ${$('#modelpick').value || 'auto'}\n\n` +
+      `## Last assistant output\n${lastAssistantText() || '(none yet)'}\n\n` +
+      `## Workspace files\n${files.length ? files.join('\n') : '(workspace not loaded)'}\n\n` +
+      `## Next step\n(resume here)\n`;
+    api('/api/checkpoint', {method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({session_id:session, note})}).catch(() => {});
+  }, 1500);
+}
+async function checkResume() {
+  try {
+    const r = await api('/api/checkpoint/' + encodeURIComponent(session));
+    $('#resumebtn').style.display = r.note ? 'block' : 'none';
+  } catch(e) {}
+}
+$('#resumebtn').onclick = async () => {
+  const r = await api('/api/checkpoint/' + encodeURIComponent(session));
+  if (!r.note) return;
+  const head = (r.note||'').split('\n').slice(0, 40).join('\n');
+  $('#prompt').value =
+    `Resume this paused project. Checkpoint note:\n${head}\n\n` +
+    `Continue from the "Next step" section using the listed workspace files. ` +
+    `Do not redo completed work.\n\n`;
+  $('#prompt').focus();
+  send();
+};
+checkResume();
+
+// ---------- history ----------
+async function loadHistory() {
+  try {
+    const msgs = await api('/api/history/' + session);
+    $('#chatcol').querySelectorAll('.msg').forEach(m => m.remove());
+    for (const m of msgs) {
+      if (m.role === 'user') addMsg('user', m.content);
+      else if (m.role === 'assistant') {
+        const meta = [m.provider, m.model].filter(Boolean).join('/') || '';
+        const b = addMsg('assistant', '', meta, m.model || m.provider);
+        const {thought, answer} = splitThought(m.content);
+        if (thought) { renderThought(b, thought, null, false); b.querySelector('.thought').classList.remove('open'); }
+        b.querySelector('.body').innerHTML = renderMd(answer);
+      }
+    }
+    smartScroll();
+  } catch(e) {}
+  checkResume();
+}
+loadHistory();
+loadChatList();
+setInterval(loadChatList, 15000);
+$('#clearchat').onclick = async () => {
+  await api('/api/history/' + session, {method:'DELETE'});
+  $('#chatcol').querySelectorAll('.msg').forEach(m => m.remove());
+  loadChatList();
+};
+
+// ---------- settings ----------
+async function loadModules() {
+  const mods = await api('/api/modules');
+  $('#modules').innerHTML = mods.map(m => `
+    <div class="panelcard"><b>${m.healthy?'<span style="color:var(--ok)">●</span>':'<span style="color:var(--err)">●</span>'} ${m.name}</b>
+      <span style="color:var(--dim);font-size:11.5px"> — ${m.description}</span>
+      <div style="font-size:11.5px;color:var(--dim);margin-top:4px;font-family:'IBM Plex Mono',monospace">
+        ${(m.tools||[]).join(', ')||'no tools'}${m.healthy?'':'<br>error: '+(m.error||'')}</div></div>`).join('')
+    || '<p style="color:var(--dim)">No modules found in ./modules</p>';
+}
+$('#rescan').onclick = async () => { await api('/api/modules/rescan',{method:'POST'}); loadModules(); };
+async function loadModulePrefs() {
+  const [mods, s] = await Promise.all([api('/api/modules'), api('/api/settings')]);
+  const prefs = s.module_prefs || {};
+  const names = mods.filter(m => m.healthy).map(m => m.name);
+  const tasks = ['chat','coding','planning'];
+  $('#modprefs').innerHTML = tasks.map(t => `
+    <div data-task="${t}" style="margin-bottom:10px">
+      <div style="font-size:12px;color:var(--fg);text-transform:capitalize;margin-bottom:4px">${t}</div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        ${names.map(n => `<label style="display:flex;gap:5px;align-items:center;color:var(--dim);font-size:12px;margin:0">
+          <input type="checkbox" value="${n}" style="width:auto"
+            ${(prefs[t]||[]).includes(n)?'checked':''}> ${n}</label>`).join('')}
+      </div></div>`).join('');
+}
+// ---------- custom AI providers ----------
+function provPayload() {
+  return { name: $('#pname').value.trim().toLowerCase(),
+           base_url: $('#pbase').value.trim(),
+           model: $('#pmodel').value.trim(),
+           api_key: $('#pkey').value || null };
+}
+function renderCustomProviders(custom, vault) {
+  const names = Object.keys(custom || {});
+  const has = n => (vault || []).includes(n);
+  $('#customprovs').innerHTML = names.length ? names.map(n => {
+    const c = custom[n];
+    return `<div class="panelcard" style="display:flex;align-items:center;gap:10px">
+      <span style="flex:1"><b>${n}</b>
+        <span style="color:var(--dim);font-size:11px;font-family:'IBM Plex Mono',monospace">
+          ${c.base_url || 'no base url'} · ${c.model || 'no model'}</span><br>
+        <span style="font-size:11px;color:${has(n)?'var(--ok)':'var(--warn)'}">
+          ${has(n)?'● key stored':'○ no key'}</span></span>
+      <button class="ghost" style="padding:4px 10px;font-size:10px" onclick="testProv('${n}')">Test</button>
+      <button class="ghost" style="padding:4px 10px;font-size:10px" onclick="delProv('${n}')">Remove</button>
+    </div>`;
+  }).join('') : '<p style="color:var(--dim);font-size:12px;margin-bottom:10px">No custom providers yet.</p>';
+}
+window.testProv = async n => {
+  const r = await api('/api/providers/test',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({name:n})});
+  $('#pstatus').textContent = r.ok ? `✓ ${n} reachable` : `✗ ${n}: ${r.error||('HTTP '+r.status)}`;
+  $('#pstatus').style.color = r.ok ? 'var(--ok)' : 'var(--err)';
+};
+window.delProv = async n => {
+  if (!confirm(`Remove provider "${n}" and its stored key?`)) return;
+  await api('/api/providers/'+n,{method:'DELETE'});
+  loadSettings(); refreshProviderOptions();
+};
+$('#psave').onclick = async () => {
+  const p = provPayload();
+  if (!/^[a-z0-9][a-z0-9_-]{0,31}$/.test(p.name)) { $('#pstatus').textContent='invalid name'; return; }
+  if (p.api_key && p.api_key.length < 8) { $('#pstatus').textContent='key too short'; return; }
+  await api('/api/providers',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
+  $('#pkey').value=''; $('#pname').value=''; $('#pbase').value=''; $('#pmodel').value='';
+  $('#pstatus').textContent='✓ saved'; $('#pstatus').style.color='var(--ok)';
+  loadSettings(); refreshProviderOptions();
+};
+$('#ptest').onclick = async () => {
+  const p = provPayload();
+  if (!p.base_url) { $('#pstatus').textContent='enter a base URL to test'; return; }
+  $('#pstatus').textContent='testing…'; $('#pstatus').style.color='var(--dim)';
+  const r = await api('/api/providers/test',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
+  $('#pstatus').textContent = r.ok ? '✓ reachable' : `✗ ${r.error||('HTTP '+r.status)}`;
+  $('#pstatus').style.color = r.ok ? 'var(--ok)' : 'var(--err)';
+};
+$('#pkeyeye').onclick = () => {
+  const k = $('#pkey');
+  k.type = k.type === 'password' ? 'text' : 'password';
+  $('#pkeyeye').textContent = k.type === 'password' ? 'Show' : 'Hide';
+};
+
+async function loadSettings() {
+  loadMediaKeyStatus();
+  loadModules(); loadModulePrefs();
+  const s = await api('/api/settings');
+  renderCustomProviders(s.custom_providers, s.providers);
+  $('#localmodel').value = s.local_model || '';
+  $('#codingmodel').value = s.coding_model || '';
+  $('#reasoningmodel').value = s.reasoning_model || '';
+  $('#cloudmodel').value = s.cloud_model || '';
+  $('#autorun').checked = !!s.auto_run_code;
+}
+$('#savtoken').onclick = () => {
+  const t = $('#authtoken').value.trim();
+  if (t) localStorage.setItem('mai_token', t);
+  $('#authtoken').value='';
+  $('#savtoken').textContent='Saved ✓'; setTimeout(()=>$('#savtoken').textContent='Save token',1200);
+  location.reload();
+};
+$('#savesettings').onclick = async () => {
+  const put = (key,value) => api('/api/settings',{method:'PUT',
+    headers:{'Content-Type':'application/json'},body:JSON.stringify({key,value})});
+  await put('local_model',$('#localmodel').value);
+  await put('coding_model',$('#codingmodel').value);
+  await put('reasoning_model',$('#reasoningmodel').value);
+  await put('cloud_model',$('#cloudmodel').value);
+  await put('auto_run_code',$('#autorun').checked);
+  const prefs = {};
+  document.querySelectorAll('#modprefs [data-task]').forEach(row => {
+    const sel = [...row.querySelectorAll('input[type=checkbox]:checked')].map(c => c.value);
+    if (sel.length) prefs[row.dataset.task] = sel;
+  });
+  await put('module_prefs', prefs);
+  $('#savesettings').textContent='Saved ✓'; setTimeout(()=>$('#savesettings').textContent='Save settings',1200);
+};
+
+// ---------- workspace explorer hover reveal ----------
+(function(){
+  const tree=$('#wstree'), trig=$('#wstrigger'); if(!tree||!trig) return;
+  let open=false;
+  function setO(o){open=o;
+    tree.style.flexBasis=o?'260px':'0px';
+    tree.style.opacity=o?'1':'0';
+    tree.style.pointerEvents=o?'auto':'none';
+    tree.style.padding=o?'12px':'12px 0';
+    tree.style.margin=o?'12px 0 12px 12px':'12px 0 12px 0';
+    tree.style.borderWidth=o?'1px':'0';
+  }
+  // proximity reveal: mouse within 30px of left edge opens explorer
+  document.addEventListener('mousemove',e=>{
+    const main=document.querySelector('#page-workspace');
+    if(!main||!main.classList.contains('active'))return;
+    const rect=main.getBoundingClientRect();
+    const nearLeft=e.clientX-rect.left<30;
+    if(nearLeft&&!open)setO(true);
+    else if(!nearLeft&&open&&!tree.matches(':hover')&&!trig.matches(':hover'))setO(false);
+  });
+  tree.addEventListener('mouseenter',()=>setO(true));
+  tree.addEventListener('mouseleave',()=>{if(!trig.matches(':hover'))setO(false);});
+})();
+
+// ---------- workspace ----------
+let curFile = null, curRoot = '';
+async function loadWorkspaces() {
+  try {
+    const roots = await api('/api/workspaces');
+    const sel = $('#wsroot');
+    const cur = sel.value;
+    sel.innerHTML = roots.map(r =>
+      `<option value="${r.custom ? r.name : ''}">${r.name}${r.custom ? ' · ' + r.path : ''}</option>`).join('');
+    if ([...sel.options].some(o => o.value === cur)) sel.value = cur;
+    $('#wsdel').style.display = sel.value ? 'block' : 'none';
+  } catch(e) {}
+}
+const _wsroot=$('#wsroot');if(_wsroot)_wsroot.onchange = () => { curRoot = _wsroot.value; const _d=$('#wsdel');if(_d)_d.style.display = curRoot ? 'block' : 'none'; loadFiles(); };
+const _wsadd=$('#wsadd');if(_wsadd)_wsadd.onclick = async () => {
+  const p = $('#wsnew').value.trim(); if (!p) return;
+  const r = await api('/api/workspaces', {method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({path:p})}).catch(e => ({error:'invalid path'}));
+  $('#wsstatus').textContent = r.ok ? `✓ added ${r.name}` : `✗ ${r.detail || r.error || 'failed'}`;
+  $('#wsstatus').style.color = r.ok ? 'var(--ok)' : 'var(--err)';
+  if (r.ok) { $('#wsnew').value=''; loadWorkspaces().then(loadFiles); }
+};
+const _wsdel=$('#wsdel');if(_wsdel)_wsdel.onclick = async () => {
+  const name = $('#wsroot').value; if (!name) return;
+  if (!confirm(`Remove workspace "${name}"?`)) return;
+  await api('/api/workspaces/'+name,{method:'DELETE'});
+  curRoot=''; loadWorkspaces().then(loadFiles);
+};
+async function loadFiles() {
+  const files = await api('/api/files' + (curRoot ? '?root=' + encodeURIComponent(curRoot) : ''));
+  if(!Array.isArray(files)) { console.warn('files not array',files); return; }
+  // separate dirs and files
+  const dirs = files.filter(f=>f && f.type==='dir' && f.path);
+  const flist = files.filter(f=>f && f.type!=='dir' && f.path);
+  // build tree for left sidebar
+  const root = {dirs:{},files:[]};
+  for (const f of files) {
+    const parts = (f.path||'').replace(/\/$/,'').split('/').filter(Boolean);
+    let node = root;
+    for (let i=0;i<parts.length;i++) {
+      const isLast = i===parts.length-1;
+      if (isLast && f.type!=='dir') { node.files.push({name:parts[i],path:f.path,size:f.size}); break; }
+      if (!node.dirs[parts[i]]) node.dirs[parts[i]] = {dirs:{},files:[]};
+      node = node.dirs[parts[i]];
+      if (isLast) break;
+    }
+  }
+  const ICON_F='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>';
+  const ICON_D='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>';
+  function renderTree(node, depth){
+    let h='';
+    for (const [dn,ch] of Object.entries(node.dirs).sort()){
+      const id='d'+Math.random().toString(36).slice(2,8);
+      const count=Object.keys(ch.dirs).length+ch.files.length;
+      h+=`<div class="fnode" onclick="toggleDir('${id}',this)"><span class="tw">▸</span>${ICON_D}<span class="nm">${dn}</span><span class="cnt">${count}</span></div>`;
+      h+=`<div class="fkids hidden" id="${id}">${renderTree(ch,depth+1)}</div>`;
+    }
+    for (const f of node.files.sort((a,b)=>a.name.localeCompare(b.name))){
+      h+=`<div class="fnode ${f.path===curFile?'sel':''}" onclick="openFile('${(f.path||'').replace(/'/g,"\\'")}')"><span class="tw"></span>${ICON_F}<span class="nm">${f.name}</span><span class="sz">${f.size}B</span></div>`;
+    }
+    return h;
+  }
+  $('#filelist').innerHTML = renderTree(root,0) || '<div style="padding:10px;color:var(--dim);font-size:11px">(empty workspace)</div>';
+  // folder cards grid — compute real counts from paths
+  $('#foldergrid').innerHTML = dirs.map(d=>{
+    const dpath=(d.path||'').replace(/\/$/,'');
+    const name=dpath.split('/').pop()||dpath||'folder';
+    const children=files.filter(f=>(f.path||'').startsWith(dpath+'/') && (f.path||'').split('/').length===(dpath.split('/').filter(Boolean).length+1));
+    const subCount=children.filter(c=>c.type==='dir').length;
+    const fileCount=children.filter(c=>c.type!=='dir').length;
+    const sub=subCount+' folders · '+fileCount+' files';
+    return `<div class="wscard" onclick="openFolder('${dpath.replace(/'/g,"\\'")}')">
+      <div class="wsicon">${ICON_D}</div>
+      <div class="wsname">${name}</div>
+      <div class="wssub">${sub}</div>
+    </div>`;
+  }).join('') || '<div style="color:var(--dim);font-size:11px">no folders</div>';
+  // file table
+  $('#filetable').innerHTML = flist.length ? `
+    <table style="width:100%;border-collapse:collapse;font-size:11px">
+      <thead><tr style="background:rgba(8,16,34,.25);color:var(--dim);font-size:10px;letter-spacing:.5px">
+        <th style="text-align:left;padding:8px 12px">Name</th><th style="text-align:left;padding:8px 12px">Size</th><th style="text-align:left;padding:8px 12px">Type</th><th style="text-align:left;padding:8px 12px">Modified</th>
+      </tr></thead>
+      <tbody>${flist.map(f=>{
+        const ext=(f.name||'').split('.').pop()||'';
+        const type=ext==='py'?'Python':ext==='js'?'JS':ext==='html'?'HTML':ext==='css'?'CSS':'File';
+        return `<tr class="frow" onclick="openFile('${(f.path||'').replace(/'/g,"\\'")}')" style="border-top:1px solid rgba(255,255,255,.08);cursor:pointer">
+          <td style="padding:8px 12px;display:flex;align-items:center;gap:6px">${ICON_F}<span>${f.name}</span></td>
+          <td style="padding:8px 12px;color:var(--dim)">${f.size}B</td>
+          <td style="padding:8px 12px;color:var(--dim)">${type}</td>
+          <td style="padding:8px 12px;color:var(--dim)">—</td>
+        </tr>`;
+      }).join('')}</tbody>
+    </table>` : '<div style="padding:20px;color:var(--dim);font-size:11px;text-align:center">no files</div>';
+}
+window.openFolder = path => { curRoot=path; loadFiles(); };
+window.toggleDir = (id,el)=>{ const k=document.getElementById(id); if(!k)return;
+  const open=k.classList.toggle('hidden')===false; el.querySelector('.tw').textContent=open?'▾':'▸'; };
+window.openFile = async path => {
+  if (path.endsWith('/')) return;
+  curFile = path;
+  const r = await api('/api/files/' + encodeURI(path));
+  const _fv=$('#fileview');if(_fv)_fv.classList.remove('hidden');
+  const _cf=$('#curfile');if(_cf)_cf.textContent = path;
+  const _fc=$('#filecontent');if(_fc)_fc.value = r.content || '';
+  loadFiles();
+};
+const _rf=$('#refreshfiles');if(_rf)_rf.onclick = loadFiles;
+const _sf=$('#savefile');if(_sf)_sf.onclick = async () => {
+  if (!curFile) return;
+  await api('/api/files/' + encodeURI(curFile), {method:'PUT',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({path:curFile, content:$('#filecontent').value})});
+};
+const _rnf=$('#runfile');if(_rnf)_rnf.onclick = async () => {
+  if (!curFile) return;
+  const out = $('#runout'); if(out){out.style.display='block'; out.textContent='running…';}
+  const r = await api('/api/run',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({path:curFile})});
+  if(out)out.textContent = `exit=${r.exit_code} peak_rss=${r.peak_rss_mb}MB\n--- stdout ---\n${r.stdout}\n--- stderr ---\n${r.stderr}`;
+};
+// ---------- chat workflow side panel ----------
+(function(){
+  const p=$('#chatpanel'), b=$('#chatpanelbtn');
+  if(!p) return;
+  function setP(open){
+    p.style.flexBasis = open?'320px':'0px';
+    p.style.margin = open?'12px 12px 12px 0':'12px 0 12px 0';
+    p.style.opacity = open?'1':'0'; p.style.pointerEvents = open?'auto':'none';
+    p.style.padding = open?'0':'0'; p.style.borderWidth = open?'1px':'0';
+    b.style.display = open?'none':'block';
+    if(open) loadCpModules();
+  }
+  $('#chatpanelclose').onclick=()=>setP(false);
+  b.onclick=()=>setP(true);
+  // hidden by default; proximity reveal on right edge of chat area
+  let hoverOpen=false;
+  const chatWrap=document.querySelector('#chatwrap');
+  document.addEventListener('mousemove',e=>{
+    const page=document.querySelector('#page-chat');
+    if(!page||!page.classList.contains('active'))return;
+    const wrapRect=chatWrap?chatWrap.getBoundingClientRect():{right:innerWidth};
+    const nearRight=e.clientX>wrapRect.right-40;
+    if(nearRight&&!hoverOpen&&p.style.opacity!=='1'){hoverOpen=true;setP(true);}
+    else if(!nearRight&&hoverOpen&&!p.matches(':hover')){hoverOpen=false;setP(false);}
+  });
+  setP(false);
+  async function loadCpModules(){
+    const el=$('#cpmodules'); if(!el) return;
+    try{ const ms=await api('/api/modules');
+      el.innerHTML=(ms||[]).map(m=>`<div style="display:flex;justify-content:space-between;padding:3px 0">
+        <span>${m.name}</span><span style="color:${m.healthy?'var(--ok)':'var(--err)'}">${m.healthy?'●':'○'}</span></div>`).join('')
+        ||'<div style="color:var(--dim)">no modules</div>';
+    }catch(e){el.innerHTML='<div style="color:var(--dim)">offline</div>';}
+  }
+  document.querySelectorAll('#chatpanel .cpact').forEach(btn=>btn.onclick=()=>{
+    const a=btn.dataset.a;
+    if(a==='media'){activatePage('media');return;}
+    const last=[...document.querySelectorAll('#chatwrap .msg.assistant .body')].pop();
+    const txt=last?last.textContent.trim().slice(0,3000):'';
+    const verbs={summarize:'Summarize this concisely:',explain:'Explain this clearly:',tasks:'Extract actionable tasks from this:'};
+    $('#prompt').value=`${verbs[a]||''}
+
+"""
+${txt}
+"""`;
+    send();
+  });
+})();
+// ---------- media module chat drawer ----------
+(function(){
+  const dr=$('#mediadrawer'), btn=$('#mediadrawerbtn');
+  if(!dr) return;
+  function setDrawer(open){
+    if(open){ dr.style.flexBasis='350px'; dr.style.margin='12px 12px 12px 0';
+      dr.style.opacity='1'; dr.style.pointerEvents='auto'; loadMdModels(); }
+    else { dr.style.flexBasis='0px'; dr.style.margin='12px 0 12px 0';
+      dr.style.opacity='0'; dr.style.pointerEvents='none';
+      if(mdSock){try{mdSock.close()}catch(e){} mdSock=null;} }
+    btn.style.display = open ? 'none' : 'block';
+  }
+  btn.onclick=()=>setDrawer(true);
+  $('#mediadrawerclose').onclick=()=>setDrawer(false);
+  setDrawer(true);
+  
+  let mdSock=null, mdAcc='';
+  async function loadMdModels(){
+    const sel=$('#mdmodel');
+    try{ const m=await api('/api/models');
+      sel.innerHTML=(m.models||[]).map(x=>`<option>${x.name}</option>`).join('')
+        ||'<option value="">no models</option>'; }catch(e){sel.innerHTML='<option value="">no models</option>';}
+  }
+  $('#mdsend').onclick=()=>{
+    const p=$('#mdinput').value.trim(); if(!p) return;
+    if(mdSock&&mdSock.readyState===1){try{mdSock.send(JSON.stringify({type:'stop'}))}catch(e){} try{mdSock.close()}catch(e){}}
+    api('/api/abort',{method:'POST'}).catch(()=>{});
+    mdAcc=''; $('#mdout').textContent='thinking…';
+    const sock=new WebSocket(wsUrl('/ws/chat'));
+    mdSock=sock;
+    sock.onopen=()=>sock.send(JSON.stringify({prompt:p,session_id:'media-assist',
+      force_provider:'ollama', preferred_model:$('#mdmodel').value||undefined}));
+    sock.onmessage=e=>{const ev=JSON.parse(e.data);
+      if(ev.type==='delta'){mdAcc+=ev.content;$('#mdout').textContent=mdAcc;}
+      else if(ev.type==='done'||ev.type==='error'||ev.type==='stopped'){
+        if(ev.type!=='delta') $('#mdout').textContent=mdAcc||'(done)';
+        try{sock.close()}catch(_){}}};
+    sock.onerror=()=>{$('#mdout').textContent=mdAcc+'\n[connection error]';};
+  };
+  $('#mdtostudio').onclick=()=>{ if(mdAcc){_mediaLast=mdAcc;
+    const pre=$('#mediaoutpre'),empty=$('#mediaprevempty');
+    pre.style.display='block';pre.textContent=mdAcc;empty.style.display='none';
+    $('#mediaprevimg').style.display='none';$('#mediaprevvid').style.display='none';}};
+  $('#mdcopy').onclick=()=>{ if(mdAcc) navigator.clipboard.writeText(mdAcc).catch(()=>{}); };
+})();
+// ---------- colibri-style quick actions ----------
+let _selText = '';
+document.addEventListener('mouseup', e => {
+  const qa = $('#quickact'); if (!qa) return;
+  const sel = window.getSelection().toString().trim();
+  if (sel.length > 3 && !e.target.closest('#quickact')) {
+    _selText = sel.slice(0, 4000);
+    qa.style.display = 'flex';
+    qa.style.left = Math.min(e.clientX, innerWidth-160) + 'px';
+    qa.style.top = (e.clientY + 8) + 'px';
+  } else if (!e.target.closest('#quickact')) { qa.style.display='none'; }
+});
+document.addEventListener('mousedown', e => {
+  const qa = $('#quickact');
+  if (qa && !e.target.closest('#quickact')) qa.style.display='none';
+});
+document.querySelectorAll('#quickact .qact').forEach(b => b.onclick = () => {
+  const act = b.dataset.a;
+  $('#quickact').style.display = 'none';
+  if (act === 'media') { activatePage('media'); return; }
+  const verbs = {summarize:'Summarize this text concisely:',
+                 explain:'Explain this clearly:',
+                 rewrite:'Rewrite and polish this text:',
+                 tasks:'Extract actionable tasks from this:'};
+  const prompt = `${verbs[act] || ''}
+
+"""
+${_selText}
+"""`;
+  $('#prompt').value = prompt;
+  activatePage('chat');
+  send();
+});
+// ---------- media studio api keys ----------
+const MK = [['gemini_api_key','GEMINI_API_KEY','Gemini (image + Veo video)'],
+            ['vercel_ai_gateway_key','VERCEL_AI_GATEWAY_KEY','Vercel AI Gateway'],
+            ['freepik_api_key','FREEPIK_API_KEY','Freepik']];
+function renderMediaKeys(status) {
+  const box = $('#mediakeys'); if (!box) return;
+  box.innerHTML = MK.map(([k,label,desc]) => `
+    <div style="display:flex;flex-direction:column;gap:4px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <b style="font-size:11.5px">${label}</b>
+        <span id="mkst_${k}" style="font-size:9.5px;padding:2px 8px;border-radius:99px;
+          ${status && status[k] ? 'background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)'
+                                : 'background:var(--hover);color:var(--dim)'}">
+          ${status && status[k] ? 'Configured' : 'Not set'}</span>
+      </div>
+      <div style="font-size:10px;color:var(--dim)">${desc}</div>
+      <div style="display:flex;gap:6px">
+        <input id="mkv_${k}" type="password" placeholder="••••••••" style="flex:1;font-size:11px;padding:6px 9px">
+        <button class="ghost" data-eye="${k}" style="padding:0 10px;font-size:10px">Show</button>
+        <button class="act" data-save="${k}" style="padding:5px 12px;font-size:10px">Save</button>
+        <button class="ghost" data-clear="${k}" style="padding:5px 10px;font-size:10px">Clear</button>
+      </div>
+    </div>`).join('');
+  box.querySelectorAll('[data-eye]').forEach(b => b.onclick = () => {
+    const i = $(`#mkv_${b.dataset.eye}`); i.type = i.type==='password'?'text':'password';
+    b.textContent = i.type==='password'?'Show':'Hide';
+  });
+  box.querySelectorAll('[data-save]').forEach(b => b.onclick = async () => {
+    const k = b.dataset.save, v = $(`#mkv_${k}`).value.trim();
+    if (!v) return;
+    const r = await api('/api/media/keys',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({key:k,value:v})}).catch(()=>null);
+    if (r && r.ok) { $(`#mkv_${k}`).value=''; loadMediaKeyStatus(); }
+  });
+  box.querySelectorAll('[data-clear]').forEach(b => b.onclick = async () => {
+    const k = b.dataset.clear;
+    await api('/api/media/keys',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({key:k,value:''})}).catch(()=>{});
+    loadMediaKeyStatus();
+  });
+}
+async function loadMediaKeyStatus() {
+  const st = await api('/api/media/keys').catch(()=>({}));
+  renderMediaKeys(st);
+}
+// ---------- media studio ----------
+let _mediaLast = '';
+async function mediaRun(tool, args) {
+  const pre = $('#mediaoutpre'), img = $('#mediaprevimg'), vid = $('#mediaprevvid'), empty = $('#mediaprevempty');
+  img.style.display='none'; vid.style.display='none'; empty.style.display='none';
+  pre.style.display='block'; pre.textContent = 'working…';
+  const r = await api('/api/media/run', {method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({tool, args})}).catch(e => ({ok:false,error:String(e)}));
+  const txt = r.ok ? r.output : ('error: ' + (r.error||'failed'));
+  _mediaLast = txt;
+  // if output contains a media URL, render it; else show formatted text
+  const urlm = txt.match(/https?:\/\/\S+\.(png|jpg|jpeg|webp|gif|mp4|webm)/i);
+  if (urlm && /video/i.test(tool)) { vid.src=urlm[0]; vid.style.display='block'; pre.style.display='none'; }
+  else if (urlm) { img.src=urlm[0]; img.style.display='block'; pre.style.display='none'; }
+  else { pre.textContent = txt; }
+}
+$('#mediacopy').onclick = () => { if(_mediaLast) navigator.clipboard.writeText(_mediaLast).catch(()=>{}); };
+$('#mi_go').onclick = () => mediaRun('media_studio.ms_image_prompt',
+  {subject:$('#mi_subject').value||'product', style:$('#mi_style').value||undefined});
+$('#mv_go').onclick = () => mediaRun('media_studio.ms_video_prompt',
+  {subject:$('#mv_subject').value||'scene', camera:$('#mv_camera').value||undefined});
+$('#ml_go').onclick = () => mediaRun('media_studio.ms_lip_sync_prompt',
+  {video_desc:$('#ml_desc').value||'talking head', audio_desc:$('#ml_audio').value||undefined});
+$('#ms_go').onclick = () => mediaRun('media_studio.ms_shot_list',
+  {subject:$('#ms_subject').value||'product', style:$('#ms_style').value||'product ad'});
+loadFiles();
+</script>
+<script>
+window.addEventListener('error',e=>{var d=document.getElementById('jserr');if(d){d.style.display='block';d.textContent='onboard: '+(e.message||'')+' @'+(e.lineno||'')}});
+// ---------- first-run onboarding: terms -> dev note -> module setup ----------
+(function(){
+  try{
+  const $q=(typeof $!=='undefined')?$:((x)=>document.querySelector(x));
+  const KT='miasma_terms_v3', KN='miasma_note1_v3', KD='miasma_setup_v3';
+  const done=k=>!!localStorage.getItem(k);
+  if(done(KT)&&done(KN)&&done(KD)) return;
+  const tm=$q('#firstmodal'), n1=$q('#notemodal'), gm=$q('#guidemodal');
+  function openSetup(){
+    const _n2=$q('#note2modal'); if(_n2)_n2.style.display='none';
+    if(!gm) return;
+    gm.style.display='flex';
+    const scan=$q('#autoscan'); if(scan) scan.click(); // auto module/hardware check
+    // mark setup complete when user closes the guide modal
+    const closer=gm.querySelector('button[onclick*="guidemodal"]');
+    if(closer) closer.addEventListener('click',()=>localStorage.setItem(KD,'1'));
+    gm.addEventListener('click',e=>{ if(e.target===gm){localStorage.setItem(KD,'1');gm.style.display='none';}},{once:true});
+  }
+  const n2=$q('#note2modal');
+  if(n1){const b=$q('#noteok');if(b)b.onclick=()=>{localStorage.setItem(KN,'1');n1.style.display='none';if(n2)n2.style.display='flex';};}
+  if(n2){const b=$q('#note2ok');if(b)b.onclick=()=>{n2.style.display='none';openSetup();};}
+  if(!done(KT)){
+    if(tm){tm.style.display='flex';
+      const chk=$q('#termscheck'), ok=$q('#firstok');
+      chk.onchange=()=>{const on=chk.checked;ok.disabled=!on;ok.style.opacity=on?'1':'.45';ok.style.cursor=on?'pointer':'not-allowed';};
+      ok.onclick=()=>{if(!chk.checked)return;localStorage.setItem(KT,'1');tm.style.display='none';if(n1)n1.style.display='flex';};
+    }
+  } else if(!done(KN)){
+    if(n1)n1.style.display='flex';
+  } else {
+    if(n2)n2.style.display='flex'; // resume at modules note -> Auto Scan leads to setup
+  }
+  // hard fallback — force gate visible if flags say incomplete
+  setTimeout(()=>{ if(!done(KT)&&tm&&tm.style.display!=='flex'){tm.style.display='flex';}
+    else if(done(KT)&&!done(KN)&&n1&&n1.style.display!=='flex'){n1.style.display='flex';}
+    else if(done(KT)&&done(KN)&&!done(KD)&&n2&&n2.style.display!=='flex'){n2.style.display='flex';}
+  },600);
+  var dbg=document.getElementById('jserr');
+  if(dbg){dbg.style.display='block';dbg.style.background='#123';dbg.textContent='onboard: KT='+(done(KT)?1:0)+' KN='+(done(KN)?1:0)+' KD='+(done(KD)?1:0)+' tm='+(tm?1:0)+' n1='+(n1?1:0)+' n2='+(n2?1:0);}
+  }catch(err){var d=document.getElementById('jserr');if(d){d.style.display='block';d.textContent='onboard err: '+err.message;}}
+})();
+</script>
+
+<script>
+// ===== MIASMA first-run onboarding (self-contained, no dependencies) =====
+(function(){
+  function g(id){return document.getElementById(id);}
+  function log(msg){var d=g('jserr');if(d){d.style.display='block';d.style.background='#123';d.textContent='onboard: '+msg;}}
+  try{
+    var KT='miasma_terms_v3',KN='miasma_note1_v3',KD='miasma_setup_v3';
+    var done=function(k){try{return !!localStorage.getItem(k)}catch(e){return false}};
+    if(done(KT)&&done(KN)&&done(KD)) return;
+    var tm=g('firstmodal'),n1=g('notemodal'),n2=g('note2modal'),gm=g('guidemodal');
+    function show(el){if(el){el.style.display='flex';el.style.visibility='visible';}}
+    function hide(el){if(el)el.style.display='none';}
+    function openSetup(){
+      hide(n2);
+      if(!gm)return;
+      show(gm);
+      var scan=g('autoscan'); if(scan) scan.click();
+      // persist setup-done when guide closes (button or backdrop)
+      var x=g('guidemodal').querySelector('button[onclick*="guidemodal"]');
+      if(x)x.addEventListener('click',function(){try{localStorage.setItem(KD,'1')}catch(e){}});
+      gm.addEventListener('click',function(e){if(e.target===gm){try{localStorage.setItem(KD,'1')}catch(e){}hide(gm);}});
+    }
+    // step wiring
+    var chk=g('termscheck'),ok=g('firstok');
+    if(chk&&ok){chk.onchange=function(){var on=chk.checked;ok.disabled=!on;ok.style.opacity=on?'1':'.45';ok.style.cursor=on?'pointer':'not-allowed';};
+      ok.onclick=function(){if(!chk.checked)return;try{localStorage.setItem(KT,'1')}catch(e){}hide(tm);show(n1);};}
+    var b1=g('noteok'); if(b1)b1.onclick=function(){try{localStorage.setItem(KN,'1')}catch(e){}hide(n1);show(n2);};
+    var b2=g('note2ok'); if(b2)b2.onclick=function(){openSetup();};
+    // initial step
+    if(!done(KT)){show(tm);}
+    else if(!done(KN)){show(n1);}
+    else{show(n2);}
+    log('KT='+(done(KT)?1:0)+' KN='+(done(KN)?1:0)+' KD='+(done(KD)?1:0));
+    // hard fallback — force correct modal visible after paint
+    setTimeout(function(){
+      if(!done(KT)&&tm&&tm.style.display!=='flex')show(tm);
+      else if(done(KT)&&!done(KN)&&n1&&n1.style.display!=='flex')show(n1);
+      else if(done(KT)&&done(KN)&&!done(KD)&&n2&&n2.style.display!=='flex')show(n2);
+    },700);
+  }catch(err){log('ERR '+(err&&err.message||err));}
+})();
+</script>
+<div id="pwmodal" style="display:none;position:fixed;inset:0;z-index:210;align-items:center;justify-content:center;background:rgba(3,6,14,.7);backdrop-filter:blur(6px)">
+  <div style="width:min(380px,92vw);background:rgba(8,16,34,.94);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.16);border-radius:16px;padding:22px 24px">
+    <div style="font-size:14px;font-weight:600;margin-bottom:4px">Authentication Required</div>
+    <div id="pwmsg" style="font-size:11.5px;color:var(--dim);margin-bottom:12px">Enter your password to continue the download.</div>
+    <input id="pwinput" type="password" placeholder="password" style="width:100%;font-size:12px;padding:9px 11px;margin-bottom:12px">
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="ghost" id="pwcancel" style="padding:7px 14px;font-size:11px">Cancel</button>
+      <button class="act" id="pwok" style="padding:7px 14px;font-size:11px">Unlock &amp; Continue</button>
+    </div>
+  </div>
+</div>
+<div id="chatnotif" style="display:none;position:fixed;right:14px;top:64px;z-index:90;width:min(360px,92vw);max-height:60vh;overflow-y:auto;background:rgba(8,16,34,.92);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:12px 14px;box-shadow:0 20px 50px -20px rgba(0,0,0,.7)">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+    <span style="font-size:10px;letter-spacing:1px;color:var(--dim)">ALERT HISTORY</span>
+    <span style="display:flex;gap:6px"><button class="ghost" id="chatnotifclear" style="padding:2px 8px;font-size:9px">clear</button>
+    <button class="ghost" id="chatnotifx" style="padding:2px 8px;font-size:9px">✕</button></span>
+  </div>
+  <div style="font-size:9px;letter-spacing:1px;color:var(--dim);margin-bottom:4px">ACTIVE DOWNLOADS</div>
+  <div id="chatdlrows" style="display:flex;flex-direction:column;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;margin-bottom:10px"></div>
+  <div style="font-size:9px;letter-spacing:1px;color:var(--dim);margin-bottom:4px">EVENTS</div>
+  <div id="chatnotiflist" style="display:flex;flex-direction:column;gap:4px;font-size:10.5px"></div>
+</div>
+</body>
+</html>

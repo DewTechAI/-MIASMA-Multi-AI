@@ -1,0 +1,22 @@
+[Unit]
+Description=Multi-AI Dashboard (offline-first multi-agent system)
+After=network-online.target ollama.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/anu/Documents/multi ai 2
+EnvironmentFile=-/home/anu/Documents/multi ai 2/.env
+ExecStartPre=/usr/bin/cmake --build /home/anu/Documents/multi ai 2/cpp/build --parallel
+ExecStart=/usr/bin/python3 -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --app-dir /home/anu/Documents/multi ai 2/backend --workers 1
+Restart=on-failure
+RestartSec=5
+# Hardening
+NoNewPrivileges=true
+ProtectSystem=full
+ProtectHome=read-only
+ReadWritePaths=/home/anu/Documents/multi ai 2/data /home/anu/Documents/multi ai 2/workspace /home/anu/Documents/multi ai 2/cpp/build
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

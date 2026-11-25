@@ -1,0 +1,29 @@
+# secrets / local env
+.env
+.env.local
+*.key
+
+# runtime / temp
+.chrome-app-profile/
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.log
+*.db
+*.sqlite3
+data/
+workspace/*/output/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# build artifacts
+cpp/build/
+*.o
+*.out
+
+# runtime workspace content
+workspace/
